@@ -9,5 +9,10 @@ namespace CodeGenerator.Model.Table {
 	public class Column {
 		public string Name { get; set; }
 		public string DataType { get; set; }
+
+		public Column(string name, string dataType) {
+			Name = name;
+			DataType = dataType;
+		}
 	}
 }

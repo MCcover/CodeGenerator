@@ -23,6 +23,13 @@
 		///  the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
 			label1 = new Label();
 			label2 = new Label();
 			txtPort = new MaskedTextBox();
@@ -38,13 +45,17 @@
 			cmbDatabase = new ComboBox();
 			label6 = new Label();
 			dgvTables = new DataGridView();
+			ColChecked = new DataGridViewCheckBoxColumn();
+			ColTable = new DataGridViewTextBoxColumn();
+			ColClassName = new DataGridViewTextBoxColumn();
+			ColSelect = new DataGridViewButtonColumn();
 			dgvTable = new DataGridView();
+			ColName = new DataGridViewTextBoxColumn();
+			ColType = new DataGridViewTextBoxColumn();
+			ColPropertyName = new DataGridViewTextBoxColumn();
 			btnGenerate = new Button();
 			grpTables = new GroupBox();
 			grpTable = new GroupBox();
-			ColChecked = new DataGridViewTextBoxColumn();
-			ColTable = new DataGridViewTextBoxColumn();
-			ColClassName = new DataGridViewTextBoxColumn();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvTables).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvTable).BeginInit();
@@ -200,8 +211,17 @@
 			// 
 			dgvTables.AllowUserToAddRows = false;
 			dgvTables.AllowUserToDeleteRows = false;
+			dgvTables.AllowUserToResizeRows = false;
 			dgvTables.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvTables.Columns.AddRange(new DataGridViewColumn[] { ColChecked, ColTable, ColClassName });
+			dgvTables.Columns.AddRange(new DataGridViewColumn[] { ColChecked, ColTable, ColClassName, ColSelect });
+			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = SystemColors.Window;
+			dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+			dataGridViewCellStyle3.ForeColor = Color.Navy;
+			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+			dgvTables.DefaultCellStyle = dataGridViewCellStyle3;
 			dgvTables.Dock = DockStyle.Fill;
 			dgvTables.Location = new Point(3, 19);
 			dgvTables.Name = "dgvTables";
@@ -209,16 +229,96 @@
 			dgvTables.RowTemplate.Height = 25;
 			dgvTables.Size = new Size(334, 446);
 			dgvTables.TabIndex = 12;
+			dgvTables.CellEndEdit += DgvTables_CellEndEdit;
+			dgvTables.CellMouseClick += DgvTables_CellMouseClick;
+			// 
+			// ColChecked
+			// 
+			ColChecked.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+			ColChecked.HeaderText = "Generate?";
+			ColChecked.Name = "ColChecked";
+			ColChecked.Width = 65;
+			// 
+			// ColTable
+			// 
+			ColTable.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle1.BackColor = Color.LightGray;
+			dataGridViewCellStyle1.ForeColor = Color.Black;
+			ColTable.DefaultCellStyle = dataGridViewCellStyle1;
+			ColTable.HeaderText = "Table";
+			ColTable.Name = "ColTable";
+			ColTable.ReadOnly = true;
+			// 
+			// ColClassName
+			// 
+			ColClassName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle2.ForeColor = Color.Black;
+			ColClassName.DefaultCellStyle = dataGridViewCellStyle2;
+			ColClassName.HeaderText = "Class Name";
+			ColClassName.Name = "ColClassName";
+			// 
+			// ColSelect
+			// 
+			ColSelect.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+			ColSelect.HeaderText = "";
+			ColSelect.Name = "ColSelect";
+			ColSelect.Text = "Open";
+			ColSelect.ToolTipText = "Open";
+			ColSelect.UseColumnTextForButtonValue = true;
+			ColSelect.Width = 5;
 			// 
 			// dgvTable
 			// 
+			dgvTable.AllowUserToAddRows = false;
+			dgvTable.AllowUserToDeleteRows = false;
+			dgvTable.AllowUserToResizeRows = false;
 			dgvTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			dgvTable.Columns.AddRange(new DataGridViewColumn[] { ColName, ColType, ColPropertyName });
+			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.BackColor = SystemColors.Window;
+			dataGridViewCellStyle7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+			dataGridViewCellStyle7.ForeColor = Color.Navy;
+			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+			dgvTable.DefaultCellStyle = dataGridViewCellStyle7;
 			dgvTable.Dock = DockStyle.Fill;
 			dgvTable.Location = new Point(3, 19);
 			dgvTable.Name = "dgvTable";
+			dgvTable.RowHeadersVisible = false;
 			dgvTable.RowTemplate.Height = 25;
 			dgvTable.Size = new Size(424, 548);
 			dgvTable.TabIndex = 13;
+			dgvTable.CellEndEdit += DgvTable_CellEndEdit;
+			// 
+			// ColName
+			// 
+			ColName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle4.BackColor = Color.LightGray;
+			dataGridViewCellStyle4.ForeColor = Color.Black;
+			ColName.DefaultCellStyle = dataGridViewCellStyle4;
+			ColName.HeaderText = "Column Name";
+			ColName.Name = "ColName";
+			ColName.ReadOnly = true;
+			// 
+			// ColType
+			// 
+			ColType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+			dataGridViewCellStyle5.BackColor = Color.LightGray;
+			dataGridViewCellStyle5.ForeColor = Color.Black;
+			ColType.DefaultCellStyle = dataGridViewCellStyle5;
+			ColType.HeaderText = "Type";
+			ColType.Name = "ColType";
+			ColType.ReadOnly = true;
+			ColType.Width = 56;
+			// 
+			// ColPropertyName
+			// 
+			ColPropertyName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle6.ForeColor = Color.Black;
+			ColPropertyName.DefaultCellStyle = dataGridViewCellStyle6;
+			ColPropertyName.HeaderText = "Property Name";
+			ColPropertyName.Name = "ColPropertyName";
 			// 
 			// btnGenerate
 			// 
@@ -253,27 +353,6 @@
 			grpTable.TabIndex = 2;
 			grpTable.TabStop = false;
 			grpTable.Text = "Table";
-			// 
-			// ColChecked
-			// 
-			ColChecked.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			ColChecked.HeaderText = "Genera";
-			ColChecked.Name = "ColChecked";
-			ColChecked.Width = 69;
-			// 
-			// ColTable
-			// 
-			ColTable.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			ColTable.HeaderText = "Table";
-			ColTable.Name = "ColTable";
-			ColTable.ReadOnly = true;
-			// 
-			// ColClassName
-			// 
-			ColClassName.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			ColClassName.HeaderText = "Class Name";
-			ColClassName.Name = "ColClassName";
-			ColClassName.Width = 94;
 			// 
 			// FormGenerator
 			// 
@@ -317,8 +396,12 @@
 		private GroupBox grpTables;
 		private GroupBox grpTable;
 		private TextBox txtIp;
-		private DataGridViewTextBoxColumn ColChecked;
+		private DataGridViewCheckBoxColumn ColChecked;
 		private DataGridViewTextBoxColumn ColTable;
 		private DataGridViewTextBoxColumn ColClassName;
+		private DataGridViewButtonColumn ColSelect;
+		private DataGridViewTextBoxColumn ColName;
+		private DataGridViewTextBoxColumn ColType;
+		private DataGridViewTextBoxColumn ColPropertyName;
 	}
 }

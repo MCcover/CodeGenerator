@@ -1,6 +1,7 @@
-﻿using CodeGenerator.Model.Enums;
+﻿using CodeGenerator.Model;
+using CodeGenerator.Model.Enums;
 
-namespace CodeGenerator.Model.DatabaseConnectors.Connectors {
+namespace CodeGenerator.DatabaseConnectors.Connectors {
 
 	public class DatabaseConnector {
 		private static volatile object _lock = new object();

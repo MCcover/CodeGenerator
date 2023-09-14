@@ -1,10 +1,11 @@
-﻿using CodeGenerator.Model.DatabaseConnectors.Interfaces;
+﻿using CodeGenerator.DatabaseConnectors.Interfaces;
+using CodeGenerator.Model;
 using CodeGenerator.Model.Enums;
 using CodeGenerator.Persistances;
 using CodeGenerator.Persistances.Interfaces;
 using System.Data.Common;
 
-namespace CodeGenerator.Model.DatabaseConnectors.Connectors {
+namespace CodeGenerator.DatabaseConnectors.Connectors {
 
 	public class GenericDatabaseConnector : IConnectorBase {
 		private IConnector _connector { get; set; }

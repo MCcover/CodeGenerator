@@ -9,6 +9,8 @@ namespace CodeGenerator.Persistances.Interfaces {
 
 	public interface IPersistance : IDisposable {
 
-		List<Table> GetTables();
+		Task<List<Table>> GetTables();
+
+		Task<List<Column>> GetColumns(string tableName);
 	}
 }
