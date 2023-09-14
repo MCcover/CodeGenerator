@@ -1,3 +1,5 @@
+using CodeGenerator.Forms;
+
 namespace CodeGenerator {
 	internal static class Program {
 		/// <summary>
