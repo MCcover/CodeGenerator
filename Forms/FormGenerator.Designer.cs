@@ -23,357 +23,370 @@
 		///  the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-			label1 = new Label();
-			label2 = new Label();
-			txtPort = new MaskedTextBox();
-			label3 = new Label();
-			txtUser = new TextBox();
-			txtPassword = new TextBox();
-			label4 = new Label();
-			txtName = new TextBox();
-			label5 = new Label();
-			btnConnectDisconnect = new Button();
-			groupBox1 = new GroupBox();
-			txtIp = new TextBox();
-			cmbDatabase = new ComboBox();
-			label6 = new Label();
-			dgvTables = new DataGridView();
-			ColChecked = new DataGridViewCheckBoxColumn();
-			ColTable = new DataGridViewTextBoxColumn();
-			ColClassName = new DataGridViewTextBoxColumn();
-			ColSelect = new DataGridViewButtonColumn();
-			dgvTable = new DataGridView();
-			ColName = new DataGridViewTextBoxColumn();
-			ColType = new DataGridViewTextBoxColumn();
-			ColPropertyName = new DataGridViewTextBoxColumn();
-			btnGenerate = new Button();
-			grpTables = new GroupBox();
-			grpTable = new GroupBox();
-			groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)dgvTables).BeginInit();
-			((System.ComponentModel.ISupportInitialize)dgvTable).BeginInit();
-			grpTables.SuspendLayout();
-			grpTable.SuspendLayout();
-			SuspendLayout();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.txtPort = new System.Windows.Forms.MaskedTextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.txtUser = new System.Windows.Forms.TextBox();
+			this.txtPassword = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.btnConnectDisconnect = new System.Windows.Forms.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.txtIp = new System.Windows.Forms.TextBox();
+			this.cmbDatabase = new System.Windows.Forms.ComboBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.dgvTables = new System.Windows.Forms.DataGridView();
+			this.ColChecked = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.ColTable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColSelect = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.dgvTable = new System.Windows.Forms.DataGridView();
+			this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColPropertyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.btnGenerate = new System.Windows.Forms.Button();
+			this.grpTables = new System.Windows.Forms.GroupBox();
+			this.grpTable = new System.Windows.Forms.GroupBox();
+			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dgvTables)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
+			this.grpTables.SuspendLayout();
+			this.grpTable.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			label1.AutoSize = true;
-			label1.ForeColor = Color.Black;
-			label1.Location = new Point(213, 29);
-			label1.Name = "label1";
-			label1.Size = new Size(23, 15);
-			label1.TabIndex = 1;
-			label1.Text = "IP: ";
+			this.label1.AutoSize = true;
+			this.label1.ForeColor = System.Drawing.Color.Black;
+			this.label1.Location = new System.Drawing.Point(213, 29);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(23, 15);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "IP: ";
 			// 
 			// label2
 			// 
-			label2.AutoSize = true;
-			label2.ForeColor = Color.Black;
-			label2.Location = new Point(201, 58);
-			label2.Name = "label2";
-			label2.Size = new Size(35, 15);
-			label2.TabIndex = 2;
-			label2.Text = "Port: ";
+			this.label2.AutoSize = true;
+			this.label2.ForeColor = System.Drawing.Color.Black;
+			this.label2.Location = new System.Drawing.Point(201, 58);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(35, 15);
+			this.label2.TabIndex = 2;
+			this.label2.Text = "Port: ";
 			// 
 			// txtPort
 			// 
-			txtPort.ForeColor = Color.Black;
-			txtPort.Location = new Point(233, 55);
-			txtPort.Mask = "00000";
-			txtPort.Name = "txtPort";
-			txtPort.Size = new Size(101, 23);
-			txtPort.TabIndex = 3;
+			this.txtPort.ForeColor = System.Drawing.Color.Black;
+			this.txtPort.Location = new System.Drawing.Point(233, 55);
+			this.txtPort.Mask = "00000";
+			this.txtPort.Name = "txtPort";
+			this.txtPort.Size = new System.Drawing.Size(101, 23);
+			this.txtPort.TabIndex = 3;
 			// 
 			// label3
 			// 
-			label3.AutoSize = true;
-			label3.ForeColor = Color.Black;
-			label3.Location = new Point(39, 55);
-			label3.Name = "label3";
-			label3.Size = new Size(36, 15);
-			label3.TabIndex = 4;
-			label3.Text = "User: ";
+			this.label3.AutoSize = true;
+			this.label3.ForeColor = System.Drawing.Color.Black;
+			this.label3.Location = new System.Drawing.Point(39, 55);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(36, 15);
+			this.label3.TabIndex = 4;
+			this.label3.Text = "User: ";
 			// 
 			// txtUser
 			// 
-			txtUser.ForeColor = Color.Black;
-			txtUser.Location = new Point(73, 52);
-			txtUser.Name = "txtUser";
-			txtUser.Size = new Size(100, 23);
-			txtUser.TabIndex = 2;
+			this.txtUser.ForeColor = System.Drawing.Color.Black;
+			this.txtUser.Location = new System.Drawing.Point(73, 52);
+			this.txtUser.Name = "txtUser";
+			this.txtUser.Size = new System.Drawing.Size(100, 23);
+			this.txtUser.TabIndex = 2;
 			// 
 			// txtPassword
 			// 
-			txtPassword.ForeColor = Color.Black;
-			txtPassword.Location = new Point(73, 81);
-			txtPassword.Name = "txtPassword";
-			txtPassword.Size = new Size(100, 23);
-			txtPassword.TabIndex = 4;
+			this.txtPassword.ForeColor = System.Drawing.Color.Black;
+			this.txtPassword.Location = new System.Drawing.Point(73, 81);
+			this.txtPassword.Name = "txtPassword";
+			this.txtPassword.Size = new System.Drawing.Size(100, 23);
+			this.txtPassword.TabIndex = 4;
 			// 
 			// label4
 			// 
-			label4.AutoSize = true;
-			label4.ForeColor = Color.Black;
-			label4.Location = new Point(12, 85);
-			label4.Name = "label4";
-			label4.Size = new Size(63, 15);
-			label4.TabIndex = 6;
-			label4.Text = "Password: ";
+			this.label4.AutoSize = true;
+			this.label4.ForeColor = System.Drawing.Color.Black;
+			this.label4.Location = new System.Drawing.Point(12, 85);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(63, 15);
+			this.label4.TabIndex = 6;
+			this.label4.Text = "Password: ";
 			// 
 			// txtName
 			// 
-			txtName.ForeColor = Color.Black;
-			txtName.Location = new Point(233, 81);
-			txtName.Name = "txtName";
-			txtName.Size = new Size(101, 23);
-			txtName.TabIndex = 5;
+			this.txtName.ForeColor = System.Drawing.Color.Black;
+			this.txtName.Location = new System.Drawing.Point(233, 81);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(101, 23);
+			this.txtName.TabIndex = 5;
 			// 
 			// label5
 			// 
-			label5.AutoSize = true;
-			label5.ForeColor = Color.Black;
-			label5.Location = new Point(173, 85);
-			label5.Name = "label5";
-			label5.Size = new Size(63, 15);
-			label5.TabIndex = 8;
-			label5.Text = "DB Name: ";
+			this.label5.AutoSize = true;
+			this.label5.ForeColor = System.Drawing.Color.Black;
+			this.label5.Location = new System.Drawing.Point(173, 85);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(63, 15);
+			this.label5.TabIndex = 8;
+			this.label5.Text = "DB Name: ";
 			// 
 			// btnConnectDisconnect
 			// 
-			btnConnectDisconnect.ForeColor = Color.Black;
-			btnConnectDisconnect.Location = new Point(6, 110);
-			btnConnectDisconnect.Name = "btnConnectDisconnect";
-			btnConnectDisconnect.Size = new Size(328, 27);
-			btnConnectDisconnect.TabIndex = 6;
-			btnConnectDisconnect.Text = "Connect Database";
-			btnConnectDisconnect.UseVisualStyleBackColor = true;
-			btnConnectDisconnect.Click += BtnConnectDisconnect_Click;
+			this.btnConnectDisconnect.ForeColor = System.Drawing.Color.Black;
+			this.btnConnectDisconnect.Location = new System.Drawing.Point(6, 110);
+			this.btnConnectDisconnect.Name = "btnConnectDisconnect";
+			this.btnConnectDisconnect.Size = new System.Drawing.Size(328, 27);
+			this.btnConnectDisconnect.TabIndex = 6;
+			this.btnConnectDisconnect.Text = "Connect Database";
+			this.btnConnectDisconnect.UseVisualStyleBackColor = true;
+			this.btnConnectDisconnect.Click += new System.EventHandler(this.BtnConnectDisconnect_Click);
 			// 
 			// groupBox1
 			// 
-			groupBox1.Controls.Add(txtIp);
-			groupBox1.Controls.Add(cmbDatabase);
-			groupBox1.Controls.Add(label6);
-			groupBox1.Controls.Add(btnConnectDisconnect);
-			groupBox1.Controls.Add(txtName);
-			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(label5);
-			groupBox1.Controls.Add(txtPort);
-			groupBox1.Controls.Add(txtPassword);
-			groupBox1.Controls.Add(txtUser);
-			groupBox1.Controls.Add(label1);
-			groupBox1.Controls.Add(label3);
-			groupBox1.Controls.Add(label4);
-			groupBox1.ForeColor = Color.Navy;
-			groupBox1.Location = new Point(12, 12);
-			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(340, 146);
-			groupBox1.TabIndex = 0;
-			groupBox1.TabStop = false;
-			groupBox1.Text = "Connection";
+			this.groupBox1.Controls.Add(this.txtIp);
+			this.groupBox1.Controls.Add(this.cmbDatabase);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.btnConnectDisconnect);
+			this.groupBox1.Controls.Add(this.txtName);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.txtPort);
+			this.groupBox1.Controls.Add(this.txtPassword);
+			this.groupBox1.Controls.Add(this.txtUser);
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.ForeColor = System.Drawing.Color.Navy;
+			this.groupBox1.Location = new System.Drawing.Point(12, 12);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(340, 146);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Connection";
 			// 
 			// txtIp
 			// 
-			txtIp.ForeColor = Color.Black;
-			txtIp.Location = new Point(233, 26);
-			txtIp.Name = "txtIp";
-			txtIp.Size = new Size(101, 23);
-			txtIp.TabIndex = 1;
+			this.txtIp.ForeColor = System.Drawing.Color.Black;
+			this.txtIp.Location = new System.Drawing.Point(233, 26);
+			this.txtIp.Name = "txtIp";
+			this.txtIp.Size = new System.Drawing.Size(101, 23);
+			this.txtIp.TabIndex = 1;
 			// 
 			// cmbDatabase
 			// 
-			cmbDatabase.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmbDatabase.FormattingEnabled = true;
-			cmbDatabase.Location = new Point(73, 23);
-			cmbDatabase.Name = "cmbDatabase";
-			cmbDatabase.Size = new Size(100, 23);
-			cmbDatabase.TabIndex = 0;
+			this.cmbDatabase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbDatabase.FormattingEnabled = true;
+			this.cmbDatabase.Location = new System.Drawing.Point(73, 23);
+			this.cmbDatabase.Name = "cmbDatabase";
+			this.cmbDatabase.Size = new System.Drawing.Size(100, 23);
+			this.cmbDatabase.TabIndex = 0;
 			// 
 			// label6
 			// 
-			label6.AutoSize = true;
-			label6.ForeColor = Color.Black;
-			label6.Location = new Point(14, 26);
-			label6.Name = "label6";
-			label6.Size = new Size(61, 15);
-			label6.TabIndex = 11;
-			label6.Text = "Database: ";
+			this.label6.AutoSize = true;
+			this.label6.ForeColor = System.Drawing.Color.Black;
+			this.label6.Location = new System.Drawing.Point(14, 26);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(61, 15);
+			this.label6.TabIndex = 11;
+			this.label6.Text = "Database: ";
 			// 
 			// dgvTables
 			// 
-			dgvTables.AllowUserToAddRows = false;
-			dgvTables.AllowUserToDeleteRows = false;
-			dgvTables.AllowUserToResizeRows = false;
-			dgvTables.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvTables.Columns.AddRange(new DataGridViewColumn[] { ColChecked, ColTable, ColClassName, ColSelect });
-			dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = SystemColors.Window;
-			dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-			dataGridViewCellStyle3.ForeColor = Color.Navy;
-			dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-			dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-			dgvTables.DefaultCellStyle = dataGridViewCellStyle3;
-			dgvTables.Dock = DockStyle.Fill;
-			dgvTables.Location = new Point(3, 19);
-			dgvTables.Name = "dgvTables";
-			dgvTables.RowHeadersVisible = false;
-			dgvTables.RowTemplate.Height = 25;
-			dgvTables.Size = new Size(334, 446);
-			dgvTables.TabIndex = 12;
-			dgvTables.CellEndEdit += DgvTables_CellEndEdit;
-			dgvTables.CellMouseClick += DgvTables_CellMouseClick;
+			this.dgvTables.AllowUserToAddRows = false;
+			this.dgvTables.AllowUserToDeleteRows = false;
+			this.dgvTables.AllowUserToResizeRows = false;
+			this.dgvTables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgvTables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColChecked,
+            this.ColTable,
+            this.ColClassName,
+            this.ColSelect});
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Navy;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dgvTables.DefaultCellStyle = dataGridViewCellStyle3;
+			this.dgvTables.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dgvTables.Location = new System.Drawing.Point(3, 19);
+			this.dgvTables.Name = "dgvTables";
+			this.dgvTables.RowHeadersVisible = false;
+			this.dgvTables.RowTemplate.Height = 25;
+			this.dgvTables.Size = new System.Drawing.Size(334, 446);
+			this.dgvTables.TabIndex = 12;
+			this.dgvTables.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTables_CellEndEdit);
+			this.dgvTables.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvTables_CellMouseClick);
 			// 
 			// ColChecked
 			// 
-			ColChecked.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			ColChecked.HeaderText = "Generate?";
-			ColChecked.Name = "ColChecked";
-			ColChecked.Width = 65;
+			this.ColChecked.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.ColChecked.HeaderText = "Generate?";
+			this.ColChecked.Name = "ColChecked";
+			this.ColChecked.Width = 65;
 			// 
 			// ColTable
 			// 
-			ColTable.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle1.BackColor = Color.LightGray;
-			dataGridViewCellStyle1.ForeColor = Color.Black;
-			ColTable.DefaultCellStyle = dataGridViewCellStyle1;
-			ColTable.HeaderText = "Table";
-			ColTable.Name = "ColTable";
-			ColTable.ReadOnly = true;
+			this.ColTable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+			this.ColTable.DefaultCellStyle = dataGridViewCellStyle1;
+			this.ColTable.HeaderText = "Table";
+			this.ColTable.Name = "ColTable";
+			this.ColTable.ReadOnly = true;
 			// 
 			// ColClassName
 			// 
-			ColClassName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle2.ForeColor = Color.Black;
-			ColClassName.DefaultCellStyle = dataGridViewCellStyle2;
-			ColClassName.HeaderText = "Class Name";
-			ColClassName.Name = "ColClassName";
+			this.ColClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+			this.ColClassName.DefaultCellStyle = dataGridViewCellStyle2;
+			this.ColClassName.HeaderText = "Class Name";
+			this.ColClassName.Name = "ColClassName";
 			// 
 			// ColSelect
 			// 
-			ColSelect.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			ColSelect.HeaderText = "";
-			ColSelect.Name = "ColSelect";
-			ColSelect.Text = "Open";
-			ColSelect.ToolTipText = "Open";
-			ColSelect.UseColumnTextForButtonValue = true;
-			ColSelect.Width = 5;
+			this.ColSelect.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.ColSelect.HeaderText = "";
+			this.ColSelect.Name = "ColSelect";
+			this.ColSelect.Text = "Open";
+			this.ColSelect.ToolTipText = "Open";
+			this.ColSelect.UseColumnTextForButtonValue = true;
+			this.ColSelect.Width = 5;
 			// 
 			// dgvTable
 			// 
-			dgvTable.AllowUserToAddRows = false;
-			dgvTable.AllowUserToDeleteRows = false;
-			dgvTable.AllowUserToResizeRows = false;
-			dgvTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvTable.Columns.AddRange(new DataGridViewColumn[] { ColName, ColType, ColPropertyName });
-			dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle7.BackColor = SystemColors.Window;
-			dataGridViewCellStyle7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-			dataGridViewCellStyle7.ForeColor = Color.Navy;
-			dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-			dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-			dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
-			dgvTable.DefaultCellStyle = dataGridViewCellStyle7;
-			dgvTable.Dock = DockStyle.Fill;
-			dgvTable.Location = new Point(3, 19);
-			dgvTable.Name = "dgvTable";
-			dgvTable.RowHeadersVisible = false;
-			dgvTable.RowTemplate.Height = 25;
-			dgvTable.Size = new Size(424, 548);
-			dgvTable.TabIndex = 13;
-			dgvTable.CellEndEdit += DgvTable_CellEndEdit;
+			this.dgvTable.AllowUserToAddRows = false;
+			this.dgvTable.AllowUserToDeleteRows = false;
+			this.dgvTable.AllowUserToResizeRows = false;
+			this.dgvTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgvTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColName,
+            this.ColType,
+            this.ColPropertyName});
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Navy;
+			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dgvTable.DefaultCellStyle = dataGridViewCellStyle7;
+			this.dgvTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dgvTable.Location = new System.Drawing.Point(3, 19);
+			this.dgvTable.Name = "dgvTable";
+			this.dgvTable.RowHeadersVisible = false;
+			this.dgvTable.RowTemplate.Height = 25;
+			this.dgvTable.Size = new System.Drawing.Size(424, 548);
+			this.dgvTable.TabIndex = 13;
+			this.dgvTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTable_CellEndEdit);
 			// 
 			// ColName
 			// 
-			ColName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle4.BackColor = Color.LightGray;
-			dataGridViewCellStyle4.ForeColor = Color.Black;
-			ColName.DefaultCellStyle = dataGridViewCellStyle4;
-			ColName.HeaderText = "Column Name";
-			ColName.Name = "ColName";
-			ColName.ReadOnly = true;
+			this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray;
+			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+			this.ColName.DefaultCellStyle = dataGridViewCellStyle4;
+			this.ColName.HeaderText = "Column Name";
+			this.ColName.Name = "ColName";
+			this.ColName.ReadOnly = true;
 			// 
 			// ColType
 			// 
-			ColType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle5.BackColor = Color.LightGray;
-			dataGridViewCellStyle5.ForeColor = Color.Black;
-			ColType.DefaultCellStyle = dataGridViewCellStyle5;
-			ColType.HeaderText = "Type";
-			ColType.Name = "ColType";
-			ColType.ReadOnly = true;
-			ColType.Width = 56;
+			this.ColType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray;
+			dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+			this.ColType.DefaultCellStyle = dataGridViewCellStyle5;
+			this.ColType.HeaderText = "Type";
+			this.ColType.Name = "ColType";
+			this.ColType.ReadOnly = true;
+			this.ColType.Width = 56;
 			// 
 			// ColPropertyName
 			// 
-			ColPropertyName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle6.ForeColor = Color.Black;
-			ColPropertyName.DefaultCellStyle = dataGridViewCellStyle6;
-			ColPropertyName.HeaderText = "Property Name";
-			ColPropertyName.Name = "ColPropertyName";
+			this.ColPropertyName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+			this.ColPropertyName.DefaultCellStyle = dataGridViewCellStyle6;
+			this.ColPropertyName.HeaderText = "Property Name";
+			this.ColPropertyName.Name = "ColPropertyName";
 			// 
 			// btnGenerate
 			// 
-			btnGenerate.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			btnGenerate.Location = new Point(361, 588);
-			btnGenerate.Name = "btnGenerate";
-			btnGenerate.Size = new Size(427, 44);
-			btnGenerate.TabIndex = 3;
-			btnGenerate.Text = "Generate Code";
-			btnGenerate.UseVisualStyleBackColor = true;
+			this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnGenerate.Location = new System.Drawing.Point(361, 588);
+			this.btnGenerate.Name = "btnGenerate";
+			this.btnGenerate.Size = new System.Drawing.Size(427, 44);
+			this.btnGenerate.TabIndex = 3;
+			this.btnGenerate.Text = "Generate Code";
+			this.btnGenerate.UseVisualStyleBackColor = true;
+			this.btnGenerate.Click += new System.EventHandler(this.BtnGenerate_Click);
 			// 
 			// grpTables
 			// 
-			grpTables.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-			grpTables.Controls.Add(dgvTables);
-			grpTables.ForeColor = Color.Navy;
-			grpTables.Location = new Point(12, 164);
-			grpTables.Name = "grpTables";
-			grpTables.Size = new Size(340, 468);
-			grpTables.TabIndex = 1;
-			grpTables.TabStop = false;
-			grpTables.Text = "Tables";
+			this.grpTables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.grpTables.Controls.Add(this.dgvTables);
+			this.grpTables.ForeColor = System.Drawing.Color.Navy;
+			this.grpTables.Location = new System.Drawing.Point(12, 164);
+			this.grpTables.Name = "grpTables";
+			this.grpTables.Size = new System.Drawing.Size(340, 468);
+			this.grpTables.TabIndex = 1;
+			this.grpTables.TabStop = false;
+			this.grpTables.Text = "Tables";
 			// 
 			// grpTable
 			// 
-			grpTable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			grpTable.Controls.Add(dgvTable);
-			grpTable.ForeColor = Color.Navy;
-			grpTable.Location = new Point(358, 12);
-			grpTable.Name = "grpTable";
-			grpTable.Size = new Size(430, 570);
-			grpTable.TabIndex = 2;
-			grpTable.TabStop = false;
-			grpTable.Text = "Table";
+			this.grpTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpTable.Controls.Add(this.dgvTable);
+			this.grpTable.ForeColor = System.Drawing.Color.Navy;
+			this.grpTable.Location = new System.Drawing.Point(358, 12);
+			this.grpTable.Name = "grpTable";
+			this.grpTable.Size = new System.Drawing.Size(430, 570);
+			this.grpTable.TabIndex = 2;
+			this.grpTable.TabStop = false;
+			this.grpTable.Text = "Table";
 			// 
 			// FormGenerator
 			// 
-			AutoScaleDimensions = new SizeF(7F, 15F);
-			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 644);
-			Controls.Add(grpTable);
-			Controls.Add(grpTables);
-			Controls.Add(btnGenerate);
-			Controls.Add(groupBox1);
-			Name = "FormGenerator";
-			StartPosition = FormStartPosition.CenterScreen;
-			Text = "Code Generator";
-			Load += FormGenerator_Load;
-			groupBox1.ResumeLayout(false);
-			groupBox1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)dgvTables).EndInit();
-			((System.ComponentModel.ISupportInitialize)dgvTable).EndInit();
-			grpTables.ResumeLayout(false);
-			grpTable.ResumeLayout(false);
-			ResumeLayout(false);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(800, 644);
+			this.Controls.Add(this.grpTable);
+			this.Controls.Add(this.grpTables);
+			this.Controls.Add(this.btnGenerate);
+			this.Controls.Add(this.groupBox1);
+			this.Name = "FormGenerator";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Code Generator";
+			this.Load += new System.EventHandler(this.FormGenerator_Load);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dgvTables)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dgvTable)).EndInit();
+			this.grpTables.ResumeLayout(false);
+			this.grpTable.ResumeLayout(false);
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

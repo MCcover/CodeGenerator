@@ -1,16 +1,18 @@
 using CodeGenerator.DatabaseConnectors.Connectors;
 using CodeGenerator.Generators;
 using CodeGenerator.Generators.Interfaces;
+using CodeGenerator.MethodsOfExtensions;
 using CodeGenerator.Model;
 using CodeGenerator.Model.Enums;
 using CodeGenerator.Model.Table;
-using System.Text.RegularExpressions;
-using System;
-using CodeGenerator.MethodsOfExtensions;
 
 namespace CodeGenerator.Forms {
 
 	public partial class FormGenerator : Form {
+
+		private List<Table> _Tables = new();
+		private int _SelectedTable = -1;
+
 		private ConnectionState ConnectionState { get; set; } = ConnectionState.Disconnected;
 
 		public FormGenerator() => InitializeComponent();
@@ -67,7 +69,9 @@ namespace CodeGenerator.Forms {
 
 				var columns = await ShowColumns(table);
 
-				row.Tag = columns;
+				_Tables[e.RowIndex].Columns = columns;
+
+				_SelectedTable = e.RowIndex;
 			}
 		}
 
@@ -78,17 +82,19 @@ namespace CodeGenerator.Forms {
 
 			var row = dgvTable.Rows[e.RowIndex];
 
-			if (row.Tag != null) {
-				var newClassName = row.Cells[ColClassName.Index].Value?.ToString();
+			var newClassName = row.Cells[ColClassName.Index].Value?.ToString();
 
-				((Table)row.Tag).ClassName = newClassName;
-			}
+			_Tables[e.RowIndex].ClassName = newClassName;
 		}
 
 		private void DgvTable_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
 			if (e.ColumnIndex != ColPropertyName.Index) {
 				return;
 			}
+
+			var propertyName = dgvTable.Rows[e.RowIndex].Cells[ColPropertyName.Index].Value?.ToString();
+
+			_Tables[_SelectedTable].Columns[e.RowIndex].Name = propertyName;
 		}
 
 		private (ConnectionInfo connectionInfo, Database database) CreateConnectionInfo() {
@@ -113,11 +119,11 @@ namespace CodeGenerator.Forms {
 		private async Task ShowTables() {
 			Cursor = Cursors.WaitCursor;
 
-			var tables = await DatabaseConnector.Instance.Connector.Persistance.GetTables();
+			_Tables = await DatabaseConnector.Instance.Connector.Persistance.GetTables();
 
 			var rows = new List<DataGridViewRow>();
 
-			foreach (var table in tables) {
+			foreach (var table in _Tables) {
 				var row = new DataGridViewRow();
 				row.CreateCells(dgvTables);
 
@@ -125,8 +131,6 @@ namespace CodeGenerator.Forms {
 				row.Cells[ColTable.Index].Value = table.Name;
 
 				row.Cells[ColClassName.Index].Value = table.Name.RemoveSpecialCharactersAndFormatText('_');
-
-				row.Tag = table;
 
 				rows.Add(row);
 			}
@@ -137,6 +141,8 @@ namespace CodeGenerator.Forms {
 		}
 
 		private async Task<List<Column>> ShowColumns(string table) {
+			dgvTable.Rows.Clear();
+
 			var columns = await DatabaseConnector.Instance.Connector.Persistance.GetColumns(table);
 
 			var rows = new List<DataGridViewRow>();
@@ -159,7 +165,16 @@ namespace CodeGenerator.Forms {
 		}
 
 		private List<Table> GetTablesToGenerate() {
-			throw new NotImplementedException();
+			var indexes = dgvTables.Rows.OfType<DataGridViewRow>()
+											.Where(x => x.Cells[ColChecked.Index].Value != null &&
+														(bool)x.Cells[ColChecked.Index].Value)
+											.Select(x => x.Index)
+											.ToList();
+
+			var tablas = indexes.Select(index => _Tables.ElementAtOrDefault(index)).ToList();
+
+			return tablas;
 		}
+
 	}
 }
