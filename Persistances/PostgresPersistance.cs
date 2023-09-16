@@ -73,8 +73,9 @@ namespace CodeGenerator.Persistances {
 			while (rs.Read()) {
 				var name = rs.GetString(rs.GetOrdinal("name"));
 				var type = rs.GetString(rs.GetOrdinal("type"));
+				var propertyName = name.RemoveSpecialCharactersAndFormatText('_');
 
-				var column = new Column(name, type, false);
+				var column = new Column(name, type, false, propertyName);
 
 				columns.Add(column);
 			}

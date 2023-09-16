@@ -1,7 +1,6 @@
 using CodeGenerator.DatabaseConnectors.Connectors;
 using CodeGenerator.Generators;
 using CodeGenerator.Generators.Abstracts;
-using CodeGenerator.MethodsOfExtensions;
 using CodeGenerator.Model;
 using CodeGenerator.Model.Enums;
 using CodeGenerator.Model.Table;
@@ -82,7 +81,7 @@ namespace CodeGenerator.Forms {
 				return;
 			}
 
-			var row = dgvTable.Rows[e.RowIndex];
+			var row = dgvTables.Rows[e.RowIndex];
 
 			var newClassName = row.Cells[ColClassName.Index].Value?.ToString();
 
@@ -163,7 +162,7 @@ namespace CodeGenerator.Forms {
 				row.Cells[ColName.Index].Value = column.Name;
 				row.Cells[ColType.Index].Value = column.DataType;
 
-				row.Cells[ColPropertyName.Index].Value = column.Name.RemoveSpecialCharactersAndFormatText('_');
+				row.Cells[ColPropertyName.Index].Value = column.PropertyName;
 
 				rows.Add(row);
 			}
