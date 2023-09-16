@@ -50,12 +50,13 @@
 			this.ColClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ColSelect = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.dgvTable = new System.Windows.Forms.DataGridView();
-			this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColPropertyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.btnGenerate = new System.Windows.Forms.Button();
 			this.grpTables = new System.Windows.Forms.GroupBox();
 			this.grpTable = new System.Windows.Forms.GroupBox();
+			this.ColConstructor = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColPropertyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvTables)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
@@ -278,6 +279,7 @@
 			this.dgvTable.AllowUserToResizeRows = false;
 			this.dgvTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dgvTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColConstructor,
             this.ColName,
             this.ColType,
             this.ColPropertyName});
@@ -297,35 +299,6 @@
 			this.dgvTable.Size = new System.Drawing.Size(424, 548);
 			this.dgvTable.TabIndex = 13;
 			this.dgvTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTable_CellEndEdit);
-			// 
-			// ColName
-			// 
-			this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray;
-			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-			this.ColName.DefaultCellStyle = dataGridViewCellStyle4;
-			this.ColName.HeaderText = "Column Name";
-			this.ColName.Name = "ColName";
-			this.ColName.ReadOnly = true;
-			// 
-			// ColType
-			// 
-			this.ColType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray;
-			dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-			this.ColType.DefaultCellStyle = dataGridViewCellStyle5;
-			this.ColType.HeaderText = "Type";
-			this.ColType.Name = "ColType";
-			this.ColType.ReadOnly = true;
-			this.ColType.Width = 56;
-			// 
-			// ColPropertyName
-			// 
-			this.ColPropertyName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-			this.ColPropertyName.DefaultCellStyle = dataGridViewCellStyle6;
-			this.ColPropertyName.HeaderText = "Property Name";
-			this.ColPropertyName.Name = "ColPropertyName";
 			// 
 			// btnGenerate
 			// 
@@ -365,6 +338,42 @@
 			this.grpTable.TabIndex = 2;
 			this.grpTable.TabStop = false;
 			this.grpTable.Text = "Table";
+			// 
+			// ColConstructor
+			// 
+			this.ColConstructor.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.ColConstructor.HeaderText = ".Constructor?";
+			this.ColConstructor.Name = "ColConstructor";
+			this.ColConstructor.Width = 89;
+			// 
+			// ColName
+			// 
+			this.ColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.LightGray;
+			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+			this.ColName.DefaultCellStyle = dataGridViewCellStyle4;
+			this.ColName.HeaderText = "Column Name";
+			this.ColName.Name = "ColName";
+			this.ColName.ReadOnly = true;
+			// 
+			// ColType
+			// 
+			this.ColType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			dataGridViewCellStyle5.BackColor = System.Drawing.Color.LightGray;
+			dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+			this.ColType.DefaultCellStyle = dataGridViewCellStyle5;
+			this.ColType.HeaderText = "Type";
+			this.ColType.Name = "ColType";
+			this.ColType.ReadOnly = true;
+			this.ColType.Width = 56;
+			// 
+			// ColPropertyName
+			// 
+			this.ColPropertyName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+			this.ColPropertyName.DefaultCellStyle = dataGridViewCellStyle6;
+			this.ColPropertyName.HeaderText = "Property Name";
+			this.ColPropertyName.Name = "ColPropertyName";
 			// 
 			// FormGenerator
 			// 
@@ -413,6 +422,7 @@
 		private DataGridViewTextBoxColumn ColTable;
 		private DataGridViewTextBoxColumn ColClassName;
 		private DataGridViewButtonColumn ColSelect;
+		private DataGridViewCheckBoxColumn ColConstructor;
 		private DataGridViewTextBoxColumn ColName;
 		private DataGridViewTextBoxColumn ColType;
 		private DataGridViewTextBoxColumn ColPropertyName;

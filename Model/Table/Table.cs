@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeGenerator.Model.Table {
+﻿namespace CodeGenerator.Model.Table {
 
 	public class Table {
 		public string Name { get; set; }
@@ -13,8 +7,9 @@ namespace CodeGenerator.Model.Table {
 
 		public string ClassName { get; set; } = "";
 
-		public Table(string name) {
+		public Table(string name, string className) {
 			Name = name;
+			ClassName = className;
 		}
 	}
 }

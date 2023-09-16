@@ -1,6 +1,6 @@
 using CodeGenerator.DatabaseConnectors.Connectors;
 using CodeGenerator.Generators;
-using CodeGenerator.Generators.Interfaces;
+using CodeGenerator.Generators.Abstracts;
 using CodeGenerator.MethodsOfExtensions;
 using CodeGenerator.Model;
 using CodeGenerator.Model.Enums;
@@ -46,11 +46,13 @@ namespace CodeGenerator.Forms {
 
 		private void BtnGenerate_Click(object sender, EventArgs e) {
 			try {
-				IGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
+				AbstractGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
 
 				List<Table> tables = GetTablesToGenerate();
 
 				generator?.Generate(tables);
+
+				MessageBox.Show(this, "Code Generated.", "SUCCESS!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} catch (Exception ex) {
 				MessageBox.Show(this, ex.Message, "ERROR!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -88,13 +90,19 @@ namespace CodeGenerator.Forms {
 		}
 
 		private void DgvTable_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
-			if (e.ColumnIndex != ColPropertyName.Index) {
-				return;
+			if (e.ColumnIndex == ColPropertyName.Index) {
+				var propertyName = dgvTable.Rows[e.RowIndex].Cells[ColPropertyName.Index].Value?.ToString();
+
+				_Tables[_SelectedTable].Columns[e.RowIndex].Name = propertyName;
 			}
 
-			var propertyName = dgvTable.Rows[e.RowIndex].Cells[ColPropertyName.Index].Value?.ToString();
+			if (e.ColumnIndex == ColConstructor.Index) {
+				var inConstructor = (bool?)dgvTable.Rows[e.RowIndex].Cells[ColConstructor.Index].Value;
 
-			_Tables[_SelectedTable].Columns[e.RowIndex].Name = propertyName;
+				_Tables[_SelectedTable].Columns[e.RowIndex].InConstructor = inConstructor ?? false;
+
+			}
+
 		}
 
 		private (ConnectionInfo connectionInfo, Database database) CreateConnectionInfo() {
@@ -130,7 +138,7 @@ namespace CodeGenerator.Forms {
 				row.Cells[ColChecked.Index].Value = false;
 				row.Cells[ColTable.Index].Value = table.Name;
 
-				row.Cells[ColClassName.Index].Value = table.Name.RemoveSpecialCharactersAndFormatText('_');
+				row.Cells[ColClassName.Index].Value = table.ClassName;
 
 				rows.Add(row);
 			}
@@ -151,6 +159,7 @@ namespace CodeGenerator.Forms {
 				var row = new DataGridViewRow();
 				row.CreateCells(dgvTable);
 
+				row.Cells[ColConstructor.Index].Value = column.InConstructor;
 				row.Cells[ColName.Index].Value = column.Name;
 				row.Cells[ColType.Index].Value = column.DataType;
 

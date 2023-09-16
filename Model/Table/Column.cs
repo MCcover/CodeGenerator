@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeGenerator.Model.Table {
+﻿namespace CodeGenerator.Model.Table {
 
 	public class Column {
 		public string Name { get; set; }
 		public string DataType { get; set; }
+		public bool InConstructor { get; internal set; }
 
-		public Column(string name, string dataType) {
+		public Column(string name, string dataType, bool inConstructor) {
 			Name = name;
 			DataType = dataType;
+			InConstructor = inConstructor;
 		}
 	}
 }

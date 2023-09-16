@@ -2,17 +2,11 @@
 using CodeGenerator.MethodsOfExtensions;
 using CodeGenerator.Model.Table;
 using CodeGenerator.Persistances.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CodeGenerator.Persistances
-{
+namespace CodeGenerator.Persistances {
 
-    public class PostgresPersistance : IPersistance {
+	public class PostgresPersistance : IPersistance {
 		private static volatile object _lock = new object();
 
 		private static PostgresPersistance? _instance;
@@ -50,7 +44,7 @@ namespace CodeGenerator.Persistances
 
 			while (rs.Read()) {
 				var name = rs.GetString(rs.GetOrdinal("name"));
-				var table = new Table(name);
+				var table = new Table(name, name.RemoveSpecialCharactersAndFormatText('_'));
 
 				tables.Add(table);
 			}
@@ -80,7 +74,7 @@ namespace CodeGenerator.Persistances
 				var name = rs.GetString(rs.GetOrdinal("name"));
 				var type = rs.GetString(rs.GetOrdinal("type"));
 
-				var column = new Column(name, type);
+				var column = new Column(name, type, false);
 
 				columns.Add(column);
 			}

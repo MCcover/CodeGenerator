@@ -1,17 +1,22 @@
-﻿using CodeGenerator.Generators.Interfaces;
+﻿using CodeGenerator.Generators.Abstracts;
 using CodeGenerator.Model.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeGenerator.Generators {
 
-	public class PostgresGenerator : IGenerator {
+	public class PostgresGenerator : AbstractGenerator {
+		public override void Generate(List<Table> tables) {
+			foreach (var table in tables) {
 
-		public void Generate(List<Table> tables) {
-			throw new NotImplementedException();
+				var model = GenerateModel(table);
+				var service = GenerateService(table);
+				var persistence = GeneratePersistence(table);
+
+				GenerateFolderStructure(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), new GeneratedFileInfo(table, model, service, persistence));
+			}
+		}
+
+		public override string GeneratePersistence(Table table) {
+			return "Empty Persistence";
 		}
 	}
 }
