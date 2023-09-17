@@ -18,10 +18,9 @@ namespace CodeGenerator.Generators.Abstracts {
 				   service = "",
 				   persistence = "";
 
-			GeneratedInterfaces interfaces = null;
-
 			if (filesToGenerate.GenerateInterfaces) {
-				interfaces = GenerateInterfaces();
+				var interfaces = GenerateInterfaces();
+				GenerateFolderStructure(path, new GeneratedFileInfo(null, "", "", "", "", interfaces));
 			}
 
 			foreach (var table in tables) {
@@ -49,7 +48,7 @@ namespace CodeGenerator.Generators.Abstracts {
 				GenerateFolderStructure(path, new GeneratedFileInfo(table, model, constructor, service, persistence, null));
 			}
 
-			GenerateFolderStructure(path, new GeneratedFileInfo(null, "", "", "", "", interfaces));
+
 		}
 
 		public abstract string GeneratePersistence(Table table);
