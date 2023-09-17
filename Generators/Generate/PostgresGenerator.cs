@@ -4,21 +4,6 @@ using CodeGenerator.Model.Table;
 namespace CodeGenerator.Generators {
 
 	public class PostgresGenerator : AbstractGenerator {
-		public override void Generate(List<Table> tables) {
-			foreach (var table in tables) {
-
-				var model = GenerateModel(table);
-				var constructor = GenerateConstructor(table);
-				var service = GenerateService(table);
-				var persistence = GeneratePersistence(table);
-
-				GenerateFolderStructure(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), new GeneratedFileInfo(table, model, constructor, service, persistence));
-			}
-		}
-
-		public override string GeneratePersistence(Table table) {
-			return "Empty Persistence";
-		}
 
 		public override string ConvertTypeBdToCSharp(string typeBd) {
 			var type = "";
@@ -83,5 +68,8 @@ namespace CodeGenerator.Generators {
 			return type;
 		}
 
+		public override string GeneratePersistence(Table table) {
+			return "Empty Persistence";
+		}
 	}
 }

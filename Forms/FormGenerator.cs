@@ -44,12 +44,29 @@ namespace CodeGenerator.Forms {
 		}
 
 		private void BtnGenerate_Click(object sender, EventArgs e) {
+
+			if (!chkModel.Checked &&
+				!chkConstructor.Checked &&
+				!chkService.Checked &&
+				!chkPersistence.Checked &&
+				!chkInterfaces.Checked) {
+				MessageBox.Show(this, "Select at least one file to generate.", "WARNING!!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
+
 			try {
 				AbstractGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
 
 				List<Table> tables = GetTablesToGenerate();
+				FilesToGenerate filesToGenerate = new FilesToGenerate(chkModel.Checked,
+																	  chkConstructor.Checked,
+																	  chkService.Checked,
+																	  chkPersistence.Checked,
+																	  chkInterfaces.Checked);
 
-				generator?.Generate(tables);
+				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+				generator?.Generate(tables, filesToGenerate, path);
 
 				MessageBox.Show(this, "Code Generated.", "SUCCESS!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} catch (Exception ex) {
