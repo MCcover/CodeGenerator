@@ -72,14 +72,14 @@ namespace CodeGenerator.Generators {
 			var columnsSimple = table.Columns.Select(x => x.Name).ToList();
 			var columns = columnsSimple.Select(x => table.Name + "." + x).ToList();
 
+			var columnsSql = string.Join(", ", columns);
+
+
 			#region Insert
-			var columnsInsert = string.Join(", ", columns);
-			var columnsParametersInsert = string.Join(", " , columnsSimple.Select(x => "@" + x).ToList());
+			var columnsParametersInsert = string.Join(", ", columnsSimple.Select(x => "@" + x).ToList());
 
-			var insert = $@"INSERT INTO {{{{tableName}}}} ({{{{columns}}}}) VALUES ({{{{columnsValues}}}})";
+			var insert = $@"""INSERT INTO {{{{tableName}}}} ({{{{columns}}}}) VALUES ({{{{columnsValues}}}})""";
 
-			insert = insert.Replace("{{tableName}}", table.Name);
-			insert = insert.Replace("{{columns}}", columnsInsert);
 			insert = insert.Replace("{{columnsValues}}", columnsParametersInsert);
 
 			#endregion
@@ -89,12 +89,16 @@ namespace CodeGenerator.Generators {
 				fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
 			}
 
-
 			var columnsWithPk = table.Columns.Where(x => x.Iskey).ToList();
 			var columnsNoPk = table.Columns.Where(x => !x.Iskey).ToList();
 
+			var parametersPk = "";
+			foreach (var column in columnsWithPk) {
+				parametersPk += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+			}
+
 			#region Condition
-			
+
 			var conditions = string.Join(" AND ", columnsWithPk.Select(x => table.Name + "." + x.Name + " = @" + x.Name));
 
 			#endregion
@@ -106,11 +110,17 @@ namespace CodeGenerator.Generators {
 
 			var modifySet = string.Join(", ", updateValues);
 
-			var modify = $@"UPDATE {{{{tableName}}}} SET {{{{modifySet}}}} WHERE {{{{conditions}}}}";
+			var modify = $@"""UPDATE {{{{tableName}}}} SET {{{{modifySet}}}} WHERE {{{{conditions}}}}""";
 
 			modify = modify.Replace("{{tableName}}", table.Name);
 			modify = modify.Replace("{{modifySet}}", modifySet);
-			modify = modify.Replace("{{conditions}}", conditions);
+
+			#endregion
+
+			#region LoadData
+
+			var loads = table.Columns.Select(x => "obj." + x.PropertyName + " = " + GenerateGetValue(ConvertTypeBdToCSharp(x.DataType), x.Name) + ";").ToList();
+			var loadData = string.Join("" + Environment.NewLine + "\t\t", loads);
 
 			#endregion
 
@@ -156,10 +166,10 @@ namespace CodeGenerator.Generators {
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
-		cmd.CommandText = ""DELETE FROM countries "" +
-							""WHERE countries.country_id = @countriesId; "";
+		cmd.CommandText = ""DELETE FROM {{{{tableName}}}} "" +
+						  ""WHERE {{{{conditions}}}}; "";
 							  
-		cmd.AddParammeter(""@countriesId"", id, DbType.Int32);
+		{{{{parametersPk}}}}
 			
 		var affectedRows = await cmd.ExecuteNonQuertyAsync();
 	
@@ -172,10 +182,10 @@ namespace CodeGenerator.Generators {
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
-		cmd.CommandText = ""SELECT 1 AS exists FROM countries "" +
-							""WHERE countries.country_id = @countriesId; "";
+		cmd.CommandText = ""SELECT 1 AS exists FROM {{{{tableName}}}} "" +
+						  ""WHERE {{{{conditions}}}}; "";
 							  
-		cmd.AddParammeter(""@countriesId"", id, DbType.Int32);
+		{{{{parametersPk}}}}
 			
 		var existsValue = (int?)await cmd.ExecuteScalarAsync();
 	
@@ -190,12 +200,8 @@ namespace CodeGenerator.Generators {
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
-		cmd.CommandText = ""SELECT countries.country_id, "" +
-							""       countries.name, "" +
-							""       countries.phone, "" +
-							""       countries.currency, "" +
-							""       ccountries.abreviation "" +
-							""FROM countries; "";
+		cmd.CommandText = ""SELECT {{{{columns}}}} "" +
+						  ""FROM {{{{tableName}}}}; "";
 			
 		var dr = await cmd.ExecuteReaderAsync();
 			
@@ -220,16 +226,12 @@ namespace CodeGenerator.Generators {
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
-		cmd.CommandText = ""SELECT countries.country_id, "" +
-							""       countries.name, "" +
-							""       countries.phone, "" +
-							""       countries.currency, "" +
-							""       ccountries.abreviation "" +
-							""FROM countries; "" +
-							""WHERE countries.country_id=@countriesId"";
+		cmd.CommandText = ""SELECT {{{{columns}}}} "" +
+						  ""FROM {{{{tableName}}}}; "" +
+						  ""WHERE {{{{conditions}}}}; "";
 			
-		cmd.AddParammeter(""@countriesId"", id, DbType.Int32);
-			
+		{{{{parametersPk}}}}
+
 		var dr = await cmd.ExecuteReaderAsync();
 	
 		if(dr.Read()) {{
@@ -245,9 +247,9 @@ namespace CodeGenerator.Generators {
 	public bool ValidateData({{{{className}}}} entity) {{
 		throw new NotImplementedException();
 	}}
-		
+
 	public void LoadData({{{{className}}}} obj, DbDataReader dr) {{
-		obj.CountryId = dr.GetString(dr.GetOrdinal(""country_id""));
+		{{{{loadData}}}}
 	}}
 }}";
 
@@ -257,10 +259,135 @@ namespace CodeGenerator.Generators {
 			text = text.Replace("{{modifySql}}", modify);
 			text = text.Replace("{{parametersModify}}", fullParameters);
 
+			text = text.Replace("{{parametersPk}}", parametersPk);
+
+			text = text.Replace("{{tableName}}", table.Name);
+
+			text = text.Replace("{{conditions}}", conditions);
+
+			text = text.Replace("{{columns}}", columnsSql);
+
+			text = text.Replace("{{loadData}}", loadData);
+
 			text = text.Replace("{{className}}", table.ClassName);
 			text = text.Replace("{{primaryKey}}", ConvertTypeBdToCSharp(table.Columns[0].DataType));
 
 			return text;
 		}
+
+		public string GenerateGetValue(string type, string parameterName) {
+
+			string get = $"dr.Get{{{{type}}}}(dr.GetOrdinal(\"{parameterName}\"))";
+
+			string t;
+
+			switch (type) {
+
+				#region INT
+
+				case "sbyte":
+				case "int":
+				case "uint":
+				case "short":
+				case "ushort":
+					t = "Int";
+					break;
+
+				#endregion INT
+
+				#region LONG
+
+				case "long":
+				case "ulong":
+					t = "Long";
+					break;
+
+				#endregion LONG
+
+				#region DOUBLE
+
+				case "float":
+				case "double":
+					t = "Double";
+					break;
+
+				#endregion DOUBLE
+
+				#region BYTE
+
+				case "byte":
+					t = "Byte";
+					break;
+
+				#endregion BYTE
+
+				#region CHAR
+
+				case "char":
+					t = "Char";
+					break;
+
+				#endregion CHAR
+
+				#region BOOL
+
+				case "bool":
+					t = "Boolean";
+					break;
+
+				#endregion BOOL
+
+				#region OBJECT
+
+				case "object":
+					t = "null";
+					break;
+
+				#endregion OBJECT
+
+				#region STRING
+
+				case "string":
+					t = "String";
+					break;
+
+				#endregion STRING
+
+				#region DECIMAL
+
+				case "decimal":
+					t = "Decimal";
+					break;
+
+				#endregion DECIMAL
+
+				#region DATETIME?
+
+				case "DateTime?":
+					t = "DateTimeNullable";
+					break;
+
+				#endregion DATETIME?
+
+				#region DATETIME
+
+				case "DateTime":
+					t = "DateTime";
+					break;
+
+				#endregion DATETIME
+
+				default:
+					t = "null";
+					break;
+			}
+
+			get = get.Replace("{{type}}", t);
+
+			return get;
+
+		}
+
 	}
+
 }

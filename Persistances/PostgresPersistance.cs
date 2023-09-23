@@ -74,7 +74,7 @@ namespace CodeGenerator.Persistances {
 							  "			   c.column_name AS name, \n" +
 							  "			   c.udt_name AS type, \n" +
 							  "			   c.column_name, \n" +
-							  "			   true AS is_pk\n" +
+							  "			   tc.constraint_type = 'PRIMARY KEY' AS is_pk\n" +
 							  "		FROM information_schema.table_constraints tc \n" +
 							  "		JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_name) \n" +
 							  "		JOIN information_schema.columns AS c ON (c.table_schema = tc.constraint_schema AND \n" +

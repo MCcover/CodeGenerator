@@ -31,11 +31,11 @@ namespace CodeGenerator.Forms {
 					DatabaseConnector.Instance.CreateConnector(connectionInfo, database).Connect();
 
 					ConnectionState = ConnectionState.Connected;
+
+					await ShowTables();
 				}
 
 				btnConnectDisconnect.Text = ConnectionState == ConnectionState.Connected ? "Disconnect Database" : "Connect Database";
-
-				await ShowTables();
 			} catch (Exception ex) {
 				DatabaseConnector.Instance.DisposeConnector();
 
