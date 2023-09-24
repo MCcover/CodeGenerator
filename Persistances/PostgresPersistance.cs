@@ -62,18 +62,21 @@ namespace CodeGenerator.Persistances {
 							  "		  j.name,\n" +
 							  "		  j.type,\n" +
 							  "		  j.column_name,\n" +
+							  "		  j.is_nullable = 'YES' AS is_nullable,\n" +
 							  "		  j.is_pk\n" +
 							  "FROM (\n" +
 							  "	SELECT t.id,\n" +
 							  "		   t.name,\n" +
 							  "		   t.type,\n" +
 							  "		   t.column_name,\n" +
+							  "		   t.is_nullable,\n" +
 							  "		   bool_or(t.is_pk) AS is_pk\n" +
 							  "	FROM (\n" +
 							  "		SELECT ROW_NUMBER() OVER (ORDER BY(SELECT NULL)) AS id,\n" +
 							  "			   c.column_name AS name, \n" +
 							  "			   c.udt_name AS type, \n" +
 							  "			   c.column_name, \n" +
+							  "			   c.is_nullable, \n" +
 							  "			   tc.constraint_type = 'PRIMARY KEY' AS is_pk\n" +
 							  "		FROM information_schema.table_constraints tc \n" +
 							  "		JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_name) \n" +
@@ -87,13 +90,14 @@ namespace CodeGenerator.Persistances {
 							  "					  c.column_name AS name, \n" +
 							  "					  c.udt_name AS type, \n" +
 							  "					  c.column_name, \n" +
+							  "					  c.is_nullable, \n" +
 							  "					  false\n" +
 							  "				 FROM information_schema.columns c\n" +
 							  "				 WHERE c.table_schema = 'public' AND\n" +
 							  "				c.table_name = @tableName AND\n" +
 							  "				c.table_catalog = @catalog)\n" +
 							  "	) T\n" +
-							  "	GROUP BY 1, 2, 3, 4\n" +
+							  "	GROUP BY 1, 2, 3, 4, 5\n" +
 							  ") J\n" +
 							  "ORDER BY j.is_pk DESC, j.id";
 
@@ -107,8 +111,9 @@ namespace CodeGenerator.Persistances {
 				var type = rs.GetString(rs.GetOrdinal("type"));
 				var propertyName = name.RemoveSpecialCharactersAndFormatText('_');
 				var isPk = rs.GetBoolean(rs.GetOrdinal("is_pk"));
+				var isNullable = rs.GetBoolean(rs.GetOrdinal("is_nullable"));
 
-				var column = new Column(name, type, false, propertyName, isPk);
+				var column = new Column(name, type, false, propertyName, isPk, isNullable);
 
 				columns.Add(column);
 			}

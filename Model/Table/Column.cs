@@ -5,14 +5,16 @@
 		public string DataType { get; set; }
 		public bool InConstructor { get; internal set; }
 		public string PropertyName { get; set; }
-        public bool Iskey { get; set; }
+		public bool Iskey { get; set; }
+		public bool IsNullable { get; set; }
 
-        public Column(string name, string dataType, bool inConstructor, string propertyName, bool iskey) {
+		public Column(string name, string dataType, bool inConstructor, string propertyName, bool iskey, bool isNullable) {
 			Name = name;
 			DataType = dataType;
 			InConstructor = inConstructor;
 			PropertyName = propertyName;
 			Iskey = iskey;
+			IsNullable = isNullable;
 		}
 	}
 }

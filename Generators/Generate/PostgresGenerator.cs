@@ -84,13 +84,14 @@ namespace CodeGenerator.Generators {
 
 			#endregion
 
-			var fullParameters = "";
-			foreach (var column in table.Columns) {
-				fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
-			}
 
 			var columnsWithPk = table.Columns.Where(x => x.Iskey).ToList();
 			var columnsNoPk = table.Columns.Where(x => !x.Iskey).ToList();
+
+			var fullParameters = "";
+			foreach (var column in columnsNoPk) {
+				fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+			}
 
 			var parametersPk = "";
 			foreach (var column in columnsWithPk) {
@@ -119,7 +120,7 @@ namespace CodeGenerator.Generators {
 
 			#region LoadData
 
-			var loads = table.Columns.Select(x => "obj." + x.PropertyName + " = " + GenerateGetValue(ConvertTypeBdToCSharp(x.DataType), x.Name) + ";").ToList();
+			var loads = table.Columns.Select(x => "obj." + x.PropertyName + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");").ToList();
 			var loadData = string.Join("" + Environment.NewLine + "\t\t", loads);
 
 			#endregion
@@ -138,9 +139,9 @@ namespace CodeGenerator.Generators {
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = {{{{insertSql}}}};
 			
-		{{{{parametersInsert}}}}
+		AllParameters(cmd, entity);
 			
-		var affectedRows = await cmd.ExecuteNonQuertyAsync();
+		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
 		_connection.Close();
 			
@@ -153,9 +154,9 @@ namespace CodeGenerator.Generators {
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = {{{{modifySql}}}};
 							  
-		{{{{parametersModify}}}}
+		AllParameters(cmd, entity);
 			
-		var affectedRows = await cmd.ExecuteNonQuertyAsync();
+		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
 		_connection.Close();
 			
@@ -171,7 +172,7 @@ namespace CodeGenerator.Generators {
 							  
 		{{{{parametersPk}}}}
 			
-		var affectedRows = await cmd.ExecuteNonQuertyAsync();
+		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
 		_connection.Close();
 			
@@ -195,25 +196,13 @@ namespace CodeGenerator.Generators {
 	}}
 	
 	public async Task<List<{{{{className}}}}>> GetAll() {{
-		var list = new List<{{{{className}}}}>();
-			
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""SELECT {{{{columns}}}} "" +
 						  ""FROM {{{{tableName}}}}; "";
 			
-		var dr = await cmd.ExecuteReaderAsync();
-			
-		while(dr.Read()) {{
-			
-			var obj = new {{{{className}}}}();
-			LoadData(obj, dr);
-				
-			list.Add(obj);
-		}}
-			
-		dr.Close();
+		var list = cmd.ExecuteSelectList<{{{{className}}}}>(LoadData);
 			
 		_connection.Close();
 			
@@ -221,8 +210,6 @@ namespace CodeGenerator.Generators {
 	}}
 	
 	public async Task<{{{{className}}}}> GetById({{{{primaryKey}}}} id) {{
-		{{{{className}}}} obj = null;
-			
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
@@ -232,16 +219,11 @@ namespace CodeGenerator.Generators {
 			
 		{{{{parametersPk}}}}
 
-		var dr = await cmd.ExecuteReaderAsync();
-	
-		if(dr.Read()) {{
-			obj = new();
-			LoadData(obj, dr);
-		}}
-			
-		dr.Close();
-			
-		return obj;
+		var result = cmd.ExecuteSelect<{{{{className}}}}>(LoadData);
+
+		_connection.Close();
+
+		return result;
 	}}
 	
 	public bool ValidateData({{{{className}}}} entity) {{
@@ -251,15 +233,28 @@ namespace CodeGenerator.Generators {
 	public void LoadData({{{{className}}}} obj, DbDataReader dr) {{
 		{{{{loadData}}}}
 	}}
+
+	public void AllParameters(DbCommand cmd, {{{{className}}}} entity) {{
+		ConditionsParameters(cmd, entity);
+		ParametersLessConditions(cmd, entity);
+	}}
+
+	public void ConditionsParameters(DbCommand cmd, {{{{className}}}} entity) {{
+		{{{{parametersPk}}}}
+	}}
+
+	public void ParametersLessConditions(DbCommand cmd, {{{{className}}}} entity) {{
+		{{{{parameters}}}}
+	}}
+
 }}";
 
 			text = text.Replace("{{insertSql}}", insert);
-			text = text.Replace("{{parametersInsert}}", fullParameters);
+			text = text.Replace("{{parameters}}", fullParameters);
 
 			text = text.Replace("{{modifySql}}", modify);
-			text = text.Replace("{{parametersModify}}", fullParameters);
-
 			text = text.Replace("{{parametersPk}}", parametersPk);
+
 
 			text = text.Replace("{{tableName}}", table.Name);
 
@@ -273,119 +268,6 @@ namespace CodeGenerator.Generators {
 			text = text.Replace("{{primaryKey}}", ConvertTypeBdToCSharp(table.Columns[0].DataType));
 
 			return text;
-		}
-
-		public string GenerateGetValue(string type, string parameterName) {
-
-			string get = $"dr.Get{{{{type}}}}(dr.GetOrdinal(\"{parameterName}\"))";
-
-			string t;
-
-			switch (type) {
-
-				#region INT
-
-				case "sbyte":
-				case "int":
-				case "uint":
-				case "short":
-				case "ushort":
-					t = "Int";
-					break;
-
-				#endregion INT
-
-				#region LONG
-
-				case "long":
-				case "ulong":
-					t = "Long";
-					break;
-
-				#endregion LONG
-
-				#region DOUBLE
-
-				case "float":
-				case "double":
-					t = "Double";
-					break;
-
-				#endregion DOUBLE
-
-				#region BYTE
-
-				case "byte":
-					t = "Byte";
-					break;
-
-				#endregion BYTE
-
-				#region CHAR
-
-				case "char":
-					t = "Char";
-					break;
-
-				#endregion CHAR
-
-				#region BOOL
-
-				case "bool":
-					t = "Boolean";
-					break;
-
-				#endregion BOOL
-
-				#region OBJECT
-
-				case "object":
-					t = "null";
-					break;
-
-				#endregion OBJECT
-
-				#region STRING
-
-				case "string":
-					t = "String";
-					break;
-
-				#endregion STRING
-
-				#region DECIMAL
-
-				case "decimal":
-					t = "Decimal";
-					break;
-
-				#endregion DECIMAL
-
-				#region DATETIME?
-
-				case "DateTime?":
-					t = "DateTimeNullable";
-					break;
-
-				#endregion DATETIME?
-
-				#region DATETIME
-
-				case "DateTime":
-					t = "DateTime";
-					break;
-
-				#endregion DATETIME
-
-				default:
-					t = "null";
-					break;
-			}
-
-			get = get.Replace("{{type}}", t);
-
-			return get;
-
 		}
 
 	}
