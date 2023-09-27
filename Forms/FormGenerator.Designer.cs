@@ -392,7 +392,7 @@
 			this.txtFilterTables.Name = "txtFilterTables";
 			this.txtFilterTables.Size = new System.Drawing.Size(328, 23);
 			this.txtFilterTables.TabIndex = 13;
-			this.txtFilterTables.TextChanged += new System.EventHandler(this.txtFilterTables_TextChanged);
+			this.txtFilterTables.TextChanged += new System.EventHandler(this.TxtFilterTables_TextChanged);
 			// 
 			// grpTable
 			// 

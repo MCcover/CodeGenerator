@@ -9,12 +9,22 @@ namespace CodeGenerator.Forms {
 
 	public partial class FormGenerator : Form {
 
+		#region Attributes
+
 		private List<Table> _Tables = new();
 		private int _SelectedTable = -1;
 
 		private ConnectionState ConnectionState { get; set; } = ConnectionState.Disconnected;
 
+		#endregion
+
+		#region Constructors
+
 		public FormGenerator() => InitializeComponent();
+
+		#endregion
+
+		#region Events
 
 		private void FormGenerator_Load(object sender, EventArgs e) {
 			cmbDatabase.DataSource = Enum.GetValues(typeof(Database));
@@ -124,6 +134,26 @@ namespace CodeGenerator.Forms {
 
 		}
 
+		private void TxtFilterTables_TextChanged(object sender, EventArgs e) {
+			string filter = txtFilterTables.Text.ToLower();
+
+			foreach (DataGridViewRow row in dgvTables.Rows) {
+				if (row.Index == dgvTables.NewRowIndex ||
+					row.Cells[ColTable.Index].Value == null) {
+					continue;
+				}
+
+				string name = row.Cells[ColTable.Index].Value.ToString().ToLower();
+
+				row.Visible = name.Contains(filter);
+
+			}
+		}
+
+		#endregion
+
+		#region Privates
+
 		private (ConnectionInfo connectionInfo, Database database) CreateConnectionInfo() {
 			var ip = txtIp.Text;
 			int.TryParse(txtPort.Text, out int port);
@@ -218,20 +248,7 @@ namespace CodeGenerator.Forms {
 			txtUser.Enabled = state != ConnectionState.Connected; ;
 		}
 
-		private void txtFilterTables_TextChanged(object sender, EventArgs e) {
-			string filter = txtFilterTables.Text.ToLower();
+		#endregion
 
-			foreach (DataGridViewRow row in dgvTables.Rows) {
-				if (row.Index == dgvTables.NewRowIndex ||
-					row.Cells[ColTable.Index].Value == null) {
-					continue;
-				}
-
-				string name = row.Cells[ColTable.Index].Value.ToString().ToLower();
-
-				row.Visible = name.Contains(filter);
-
-			}
-		}
 	}
 }
