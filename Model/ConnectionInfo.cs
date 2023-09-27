@@ -22,9 +22,24 @@ namespace CodeGenerator.Model {
 			var octates = ip.Split('.').Select(x => Convert.ToByte(x)).ToArray();
 
 			Ip = new IPAddress(octates);
+
+			if (port <= 0 || port > 65535) {
+				throw new Exception("Invalid Port");
+			}
+
 			Port = port;
+
+			if (databaseName.Trim() == string.Empty) {
+				throw new Exception("Invalid Database Name");
+			}
+
 			DatabaseName = databaseName;
+
+			if (databaseUser.Trim() == string.Empty) {
+				throw new Exception("Invalid Database User");
+			}
 			DatabaseUser = databaseUser;
+
 			DatabasePassword = databasePassword;
 
 		}

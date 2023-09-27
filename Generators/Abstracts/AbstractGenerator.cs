@@ -14,23 +14,26 @@ namespace CodeGenerator.Generators.Abstracts {
 
 		public void Generate(List<Table> tables, FilesToGenerate filesToGenerate, string path) {
 			string model = "",
+				   modelPk = "",
 				   constructor = "",
 				   service = "",
 				   persistence = "";
 
 			if (filesToGenerate.GenerateInterfaces) {
 				var interfaces = GenerateInterfaces();
-				GenerateFolderStructure(path, new GeneratedFileInfo(null, "", "", "", "", interfaces));
+				GenerateFolderStructure(path, new GeneratedFileInfo(null, "", "", "", "", "", interfaces));
 			}
 
 			foreach (var table in tables) {
 				model = "";
+				modelPk = "";
 				constructor = "";
 				service = "";
 				persistence = "";
 
 				if (filesToGenerate.GenerateModel) {
 					model = GenerateModel(table);
+					modelPk = GenerateModelPk(table);
 				}
 
 				if (filesToGenerate.GenerateConstructor) {
@@ -45,7 +48,7 @@ namespace CodeGenerator.Generators.Abstracts {
 					persistence = GeneratePersistence(table);
 				}
 
-				GenerateFolderStructure(path, new GeneratedFileInfo(table, model, constructor, service, persistence, null));
+				GenerateFolderStructure(path, new GeneratedFileInfo(table, model, modelPk, constructor, service, persistence, null));
 			}
 
 
@@ -110,12 +113,17 @@ namespace CodeGenerator.Generators.Abstracts {
 
 			if (generatedInfo.Table != null) {
 				var pathFileDomain = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + ".cs");
+				var pathFileDomainPk = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + "Id.cs");
 				var pathFileDomainConstructor = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + "Constructors.cs");
 				var pathFileService = Path.Combine(paths.PathServicesFolder, generatedInfo.Table.ClassName + "Service.cs");
 				var pathFileRepository = Path.Combine(paths.PathPersistenceFolder, generatedInfo.Table.ClassName + "Repository.cs");
 
 				if (generatedInfo.Model != null && generatedInfo.Model.Trim() != string.Empty) {
 					GenerateFile(pathFileDomain, generatedInfo.Model);
+				}
+
+				if (generatedInfo.ModelPk != null && generatedInfo.ModelPk.Trim() != string.Empty) {
+					GenerateFile(pathFileDomainPk, generatedInfo.ModelPk);
 				}
 
 				if (generatedInfo.Constructor != null && generatedInfo.Constructor.Trim() != string.Empty) {
@@ -190,13 +198,15 @@ public class FilesToGenerate {
 public class GeneratedFileInfo {
 	public Table Table { get; set; }
 	public string Model { get; set; }
+	public string ModelPk { get; set; }
 	public string Constructor { get; set; }
 	public string Service { get; set; }
 	public string Persistence { get; set; }
 	public GeneratedInterfaces Interfaces { get; set; }
 
-	public GeneratedFileInfo(Table table, string model, string constructor, string service, string persistence, GeneratedInterfaces interfaces) {
+	public GeneratedFileInfo(Table table, string model, string modelPk, string constructor, string service, string persistence, GeneratedInterfaces interfaces) {
 		Model = model;
+		ModelPk = modelPk;
 		Constructor = constructor;
 		Service = service;
 		Persistence = persistence;
@@ -206,12 +216,14 @@ public class GeneratedFileInfo {
 
 	public bool HasInfo() {
 		bool hasModel = (Model != null && Model.Trim() != string.Empty);
+		bool hasModelPk = (ModelPk != null && ModelPk.Trim() != string.Empty);
 		bool hasConstructor = (Constructor != null && Constructor.Trim() != string.Empty);
 		bool hasService = (Service != null && Service.Trim() != string.Empty);
 		bool hasPersistence = (Persistence != null && Persistence.Trim() != string.Empty);
 		bool hasInterface = Interfaces != null;
 
 		return !(hasModel ||
+				 hasModelPk ||
 				 hasConstructor ||
 				 hasService ||
 				 hasPersistence ||

@@ -125,7 +125,7 @@ namespace CodeGenerator.Generators {
 
 			#endregion
 
-			var text = $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{primaryKey}}}}> {{
+			var text = $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{className}}}}Id> {{
 
 	private IConnecion _connection;
 	
@@ -163,14 +163,14 @@ namespace CodeGenerator.Generators {
 		return affectedRows > 0;
 	}}
 	
-	public async Task<bool> Delete({{{{primaryKey}}}} id) {{
+	public async Task<bool> Delete({{{{className}}}}Id id) {{
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""DELETE FROM {{{{tableName}}}} "" +
 						  ""WHERE {{{{conditions}}}}; "";
 							  
-		{{{{parametersPk}}}}
+		ConditionsParameters(cmd, id);
 			
 		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
@@ -179,14 +179,14 @@ namespace CodeGenerator.Generators {
 		return affectedRows > 0;
 	}}
 	
-	public async Task<bool> Exists({{{{primaryKey}}}} id) {{
+	public async Task<bool> Exists({{{{className}}}}Id id) {{
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""SELECT 1 AS exists FROM {{{{tableName}}}} "" +
 						  ""WHERE {{{{conditions}}}}; "";
 							  
-		{{{{parametersPk}}}}
+		ConditionsParameters(cmd, id);
 			
 		var existsValue = (int?)await cmd.ExecuteScalarAsync();
 	
@@ -209,7 +209,7 @@ namespace CodeGenerator.Generators {
 		return list;
 	}}
 	
-	public async Task<{{{{className}}}}> GetById({{{{primaryKey}}}} id) {{
+	public async Task<{{{{className}}}}> GetById({{{{className}}}}Id id) {{
 		_connection.Open();
 			
 		var cmd = _connection.CreateCommand();
@@ -217,7 +217,7 @@ namespace CodeGenerator.Generators {
 						  ""FROM {{{{tableName}}}}; "" +
 						  ""WHERE {{{{conditions}}}}; "";
 			
-		{{{{parametersPk}}}}
+		ConditionsParameters(cmd, id);
 
 		var result = cmd.ExecuteSelect<{{{{className}}}}>(LoadData);
 
@@ -239,7 +239,7 @@ namespace CodeGenerator.Generators {
 		ParametersLessConditions(cmd, entity);
 	}}
 
-	public void ConditionsParameters(DbCommand cmd, {{{{className}}}} entity) {{
+	public void ConditionsParameters(DbCommand cmd, {{{{className}}}}Id entity) {{
 		{{{{parametersPk}}}}
 	}}
 

@@ -49,6 +49,10 @@ namespace CodeGenerator.DatabaseConnectors.Connectors {
 			return _connector;
 		}
 
+		public bool ConnectorStablished() {
+			return _connector != null;
+		}
+
 		public void DisposeConnector() {
 			_connector.Disconnect();
 			_connector = null;

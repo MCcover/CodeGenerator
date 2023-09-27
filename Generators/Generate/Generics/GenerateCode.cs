@@ -4,11 +4,33 @@ namespace CodeGenerator.Generators.Generate.Generic {
 	public abstract class GenerateCode {
 
 		public string GenerateModel(Table table) {
+
+			var noPk = table.Columns.Where(x => !x.Iskey).ToList();
+
 			var text = "";
 
-			text += "public partial class {{className}} {" + Environment.NewLine;
+			text += "public partial class {{className}} : {{className}}Id {" + Environment.NewLine;
 
-			foreach (var column in table.Columns) {
+			foreach (var column in noPk) {
+				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
+			}
+
+			text += "}";
+
+			text = text.Replace("{{className}}", table.ClassName);
+
+			return text;
+		}
+
+		public string GenerateModelPk(Table table) {
+
+			var pk = table.Columns.Where(x => x.Iskey).ToList();
+
+			var text = "";
+
+			text += "public class {{className}}Id {" + Environment.NewLine;
+
+			foreach (var column in pk) {
 				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
 			}
 
@@ -70,9 +92,9 @@ namespace CodeGenerator.Generators.Generate.Generic {
 		}
 
 		public string GenerateService(Table table) {
-			var text = @"public class {{className}}Service : IBaseService<{{className}}, {{PrimaryKey}}> {
-	private readonly IBaseRepository<{{className}}, {{PrimaryKey}}> _{{className}}Repository = null!;
-	public {{className}}Service(IBaseRepository<{{className}}, {{PrimaryKey}}> {{className}}Repository) {
+			var text = @"public class {{className}}Service : IBaseService<{{className}}, {{className}}Id> {
+	private readonly IBaseRepository<{{className}}, {{className}}Id> _{{className}}Repository = null!;
+	public {{className}}Service(IBaseRepository<{{className}}, {{className}}Id> {{className}}Repository) {
 		_{{className}}Repository = {{className}}Repository;
 	}
 
@@ -83,14 +105,14 @@ namespace CodeGenerator.Generators.Generate.Generic {
 		return false;
 	}
 
-	public async Task<bool> Delete({{PrimaryKey}} id) {
+	public async Task<bool> Delete({{className}}Id id) {
 		if (!await Exists(id)) {
 			throw new Exception(""{{className}} id is empty"");
 		}
 		return await _{{className}}Repository.Delete(id);
 	}
 
-	public async Task<bool> Exists({{PrimaryKey}} id) {
+	public async Task<bool> Exists({{className}}Id id) {
 		if (id == 0) {
 			throw new Exception(""{{className}} id is empty"");
 		}
@@ -101,7 +123,7 @@ namespace CodeGenerator.Generators.Generate.Generic {
 		return _{{className}}Repository.GetAll();
 	}
 
-	public async Task<{{className}}> GetById({{PrimaryKey}} id) {
+	public async Task<{{className}}> GetById({{className}}Id id) {
 		if (!await Exists(id)) {
 			throw new Exception(""{{className}} id dosen't exists"");
 		}
@@ -119,7 +141,6 @@ namespace CodeGenerator.Generators.Generate.Generic {
 }";
 
 			text = text.Replace("{{className}}", table.ClassName);
-			text = text.Replace("{{PrimaryKey}}", ConvertTypeBdToCSharp(table.Columns[0].DataType));
 
 			return text;
 		}

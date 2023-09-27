@@ -22,6 +22,8 @@ namespace CodeGenerator.Forms {
 
 		private async void BtnConnectDisconnect_Click(object sender, EventArgs e) {
 			try {
+				CleanTables();
+
 				if (ConnectionState == ConnectionState.Connected) {
 					DatabaseConnector.Instance.DisposeConnector();
 					ConnectionState = ConnectionState.Disconnected;
@@ -35,12 +37,13 @@ namespace CodeGenerator.Forms {
 					await ShowTables();
 				}
 
+				EnableDisableControls(ConnectionState);
+
 				btnConnectDisconnect.Text = ConnectionState == ConnectionState.Connected ? "Disconnect Database" : "Connect Database";
 			} catch (Exception ex) {
-				DatabaseConnector.Instance.DisposeConnector();
-
 				MessageBox.Show(this, ex.Message, "ERROR!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+
 		}
 
 		private void BtnGenerate_Click(object sender, EventArgs e) {
@@ -123,7 +126,7 @@ namespace CodeGenerator.Forms {
 
 		private (ConnectionInfo connectionInfo, Database database) CreateConnectionInfo() {
 			var ip = txtIp.Text;
-			var port = Convert.ToInt32(txtPort.Text);
+			int.TryParse(txtPort.Text, out int port);
 			var databaseName = txtName.Text;
 			var databaseUser = txtUser.Text;
 			var databasePassword = txtPassword.Text;
@@ -140,7 +143,13 @@ namespace CodeGenerator.Forms {
 			return database;
 		}
 
+		private void CleanTables() {
+			dgvTables.Rows.Clear();
+			dgvTable.Rows.Clear();
+		}
+
 		private async Task ShowTables() {
+
 			Cursor = Cursors.WaitCursor;
 
 			_Tables = await DatabaseConnector.Instance.Connector.Persistance.GetTables();
@@ -196,10 +205,33 @@ namespace CodeGenerator.Forms {
 											.Select(x => x.Index)
 											.ToList();
 
-			var tablas = indexes.Select(index => _Tables.ElementAtOrDefault(index)).ToList();
+			var tables = indexes.Select(index => _Tables.ElementAtOrDefault(index)).ToList();
 
-			return tablas;
+			return tables;
 		}
 
+		private void EnableDisableControls(ConnectionState state) {
+			txtIp.Enabled =
+			txtPort.Enabled =
+			txtName.Enabled =
+			txtPassword.Enabled =
+			txtUser.Enabled = state != ConnectionState.Connected; ;
+		}
+
+		private void txtFilterTables_TextChanged(object sender, EventArgs e) {
+			string filter = txtFilterTables.Text.ToLower();
+
+			foreach (DataGridViewRow row in dgvTables.Rows) {
+				if (row.Index == dgvTables.NewRowIndex ||
+					row.Cells[ColTable.Index].Value == null) {
+					continue;
+				}
+
+				string name = row.Cells[ColTable.Index].Value.ToString().ToLower();
+
+				row.Visible = name.Contains(filter);
+
+			}
+		}
 	}
 }
