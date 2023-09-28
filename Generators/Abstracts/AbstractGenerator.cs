@@ -12,7 +12,7 @@ namespace CodeGenerator.Generators.Abstracts {
 		private const string FOLDER_SERVICES = "Services";
 		private const string FOLDER_INTERFACES = "Interfaces";
 
-		public void Generate(List<Table> tables, FilesToGenerate filesToGenerate, string path) {
+		public void Generate(string projectName, List<Table> tables, FilesToGenerate filesToGenerate, string path) {
 			string model = "",
 				   modelPk = "",
 				   constructor = "",
@@ -20,8 +20,15 @@ namespace CodeGenerator.Generators.Abstracts {
 				   persistence = "";
 
 			if (filesToGenerate.GenerateInterfaces) {
-				var interfaces = GenerateInterfaces();
-				GenerateFolderStructure(path, new GeneratedFileInfo(null, "", "", "", "", "", interfaces));
+				var nameSpace = projectName + ".Interfaces";
+				var interfaces = GenerateInterfaces(nameSpace);
+
+				var generatedInfo = new GeneratedFileInfo(null, interfaces);
+
+				var paths = GenerateFolderStructure(path, generatedInfo);
+
+				GenerateFiles(paths, generatedInfo);
+
 			}
 
 			foreach (var table in tables) {
@@ -31,32 +38,43 @@ namespace CodeGenerator.Generators.Abstracts {
 				service = "";
 				persistence = "";
 
+				var generatedInfo = new GeneratedFileInfo(table, null);
+
+				var paths = GenerateFolderStructure(path, generatedInfo);
+
 				if (filesToGenerate.GenerateModel) {
-					model = GenerateModel(table);
-					modelPk = GenerateModelPk(table);
+					var nameSpace = projectName + "." + string.Join(".", paths.PathDomainFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+					model = GenerateModel(nameSpace, table);
+					modelPk = GenerateModelPk(nameSpace, table);
 				}
 
 				if (filesToGenerate.GenerateConstructor) {
-					constructor = GenerateConstructor(table);
+					var nameSpace = projectName + "." + string.Join(".", paths.PathDomainFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+					constructor = GenerateConstructor(nameSpace, table);
 				}
 
 				if (filesToGenerate.GenerateService) {
-					service = GenerateService(table);
+					var nameSpace = projectName + "." + string.Join(".", paths.PathServicesFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+					service = GenerateService(nameSpace, table);
 				}
 
 				if (filesToGenerate.GeneratePersistence) {
-					persistence = GeneratePersistence(table);
+					var nameSpace = projectName + "." + string.Join(".", paths.PathServicesFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+					persistence = GeneratePersistence(nameSpace, table);
 				}
 
-				GenerateFolderStructure(path, new GeneratedFileInfo(table, model, modelPk, constructor, service, persistence, null));
-			}
+				generatedInfo.SetData(model, modelPk, constructor, service, persistence);
 
+				GenerateFiles(paths, generatedInfo);
+			}
 
 		}
 
-		public abstract string GeneratePersistence(Table table);
+		public abstract string GeneratePersistence(string nameSpace, Table table);
 
-		public void GenerateFolderStructure(string destinationPath, GeneratedFileInfo generatedInfo) {
+		public Paths GenerateFolderStructure(string destinationPath, GeneratedFileInfo generatedInfo) {
 
 			if (destinationPath == null || destinationPath.Trim().Length <= 0) {
 				throw new Exception("The Destination Path is Required.");
@@ -64,10 +82,6 @@ namespace CodeGenerator.Generators.Abstracts {
 
 			if (generatedInfo == null) {
 				throw new Exception("The information for the table to generate is not loaded.");
-			}
-
-			if (generatedInfo.HasInfo()) {
-				throw new Exception("The model, persistence, or service layer has not been generated.");
 			}
 
 			var path = destinationPath;
@@ -106,12 +120,16 @@ namespace CodeGenerator.Generators.Abstracts {
 
 			var paths = new Paths(pathDomainFolder, pathPersistenceFolder, pathServicesFolder, pathInterfaces);
 
-			GenerateFiles(paths, generatedInfo);
+			return paths;
 		}
 
 		private void GenerateFiles(Paths paths, GeneratedFileInfo generatedInfo) {
 
 			if (generatedInfo.Table != null) {
+				if (generatedInfo.HasInfo()) {
+					throw new Exception("The model, persistence, or service layer has not been generated.");
+				}
+
 				var pathFileDomain = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + ".cs");
 				var pathFileDomainPk = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + "Id.cs");
 				var pathFileDomainConstructor = Path.Combine(paths.PathDomainFolder, generatedInfo.Table.ClassName + "Constructors.cs");
@@ -138,6 +156,7 @@ namespace CodeGenerator.Generators.Abstracts {
 					GenerateFile(pathFileRepository, generatedInfo.Persistence);
 				}
 			}
+
 
 			if (generatedInfo.Interfaces != null) {
 				var pathFileInterfaceAdd = Path.Combine(paths.PathInterfaces, "IAdd.cs");
@@ -204,14 +223,17 @@ public class GeneratedFileInfo {
 	public string Persistence { get; set; }
 	public GeneratedInterfaces Interfaces { get; set; }
 
-	public GeneratedFileInfo(Table table, string model, string modelPk, string constructor, string service, string persistence, GeneratedInterfaces interfaces) {
+	public GeneratedFileInfo(Table table, GeneratedInterfaces interfaces) {
+		Table = table;
+		Interfaces = interfaces;
+	}
+
+	public void SetData(string model, string modelPk, string constructor, string service, string persistence) {
 		Model = model;
 		ModelPk = modelPk;
 		Constructor = constructor;
 		Service = service;
 		Persistence = persistence;
-		Table = table;
-		Interfaces = interfaces;
 	}
 
 	public bool HasInfo() {

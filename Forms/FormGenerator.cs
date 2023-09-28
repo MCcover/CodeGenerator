@@ -78,8 +78,9 @@ namespace CodeGenerator.Forms {
 																	  chkInterfaces.Checked);
 
 				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+				var projectName = txtProjectName.Text;
 
-				generator?.Generate(tables, filesToGenerate, path);
+				generator?.Generate(projectName, tables, filesToGenerate, path);
 
 				MessageBox.Show(this, "Code Generated.", "SUCCESS!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} catch (Exception ex) {

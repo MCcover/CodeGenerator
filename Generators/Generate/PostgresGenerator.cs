@@ -68,12 +68,11 @@ namespace CodeGenerator.Generators {
 			return type;
 		}
 
-		public override string GeneratePersistence(Table table) {
+		public override string GeneratePersistence(string nameSpace, Table table) {
 			var columnsSimple = table.Columns.Select(x => x.Name).ToList();
 			var columns = columnsSimple.Select(x => table.Name + "." + x).ToList();
 
 			var columnsSql = string.Join(", ", columns);
-
 
 			#region Insert
 			var columnsParametersInsert = string.Join(", ", columnsSimple.Select(x => "@" + x).ToList());
@@ -83,7 +82,6 @@ namespace CodeGenerator.Generators {
 			insert = insert.Replace("{{columnsValues}}", columnsParametersInsert);
 
 			#endregion
-
 
 			var columnsWithPk = table.Columns.Where(x => x.Iskey).ToList();
 			var columnsNoPk = table.Columns.Where(x => !x.Iskey).ToList();
@@ -125,7 +123,8 @@ namespace CodeGenerator.Generators {
 
 			#endregion
 
-			var text = $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{className}}}}Id> {{
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+$@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{className}}}}Id> {{
 
 	private IConnecion _connection;
 	

@@ -3,11 +3,11 @@
 namespace CodeGenerator.Generators.Generate.Generic {
 	public abstract class GenerateCode {
 
-		public string GenerateModel(Table table) {
+		public string GenerateModel(string nameSpace, Table table) {
 
 			var noPk = table.Columns.Where(x => !x.Iskey).ToList();
 
-			var text = "";
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine;
 
 			text += "public partial class {{className}} : {{className}}Id {" + Environment.NewLine;
 
@@ -22,11 +22,11 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			return text;
 		}
 
-		public string GenerateModelPk(Table table) {
+		public string GenerateModelPk(string nameSpace, Table table) {
 
 			var pk = table.Columns.Where(x => x.Iskey).ToList();
 
-			var text = "";
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine;
 
 			text += "public class {{className}}Id {" + Environment.NewLine;
 
@@ -41,8 +41,8 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			return text;
 		}
 
-		public string GenerateConstructor(Table table) {
-			var text = "";
+		public string GenerateConstructor(string nameSpace, Table table) {
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine;
 
 			text += "public partial class {{className}} {" + Environment.NewLine;
 
@@ -91,8 +91,9 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			return text;
 		}
 
-		public string GenerateService(Table table) {
-			var text = @"public class {{className}}Service : IBaseService<{{className}}, {{className}}Id> {
+		public string GenerateService(string nameSpace, Table table) {
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public class {{className}}Service : IBaseService<{{className}}, {{className}}Id> {
 	private readonly IBaseRepository<{{className}}, {{className}}Id> _{{className}}Repository = null!;
 	public {{className}}Service(IBaseRepository<{{className}}, {{className}}Id> {{className}}Repository) {
 		_{{className}}Repository = {{className}}Repository;
@@ -145,29 +146,38 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			return text;
 		}
 
-		public GeneratedInterfaces GenerateInterfaces() {
-			string interfaceAdd = @"public interface IAdd<T> {
+		public GeneratedInterfaces GenerateInterfaces(string nameSpace) {
+
+			string interfaceAdd = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IAdd<T> {
 	Task<bool> Add (T entity);
 }";
-			string interfaceModify = @"public interface IModify<T> {
+			string interfaceModify = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IModify<T> {
 	Task<bool> Modify (T entity);
 }";
-			string interfaceDelete = @"public interface IDelete<I> {
+			string interfaceDelete = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IDelete<I> {
 	Task<bool> Delete (I id);
 }";
-			string interfaceList = @"public interface IList<T, I> {
+			string interfaceList = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IList<T, I> {
 	List<T> GetAll ();
 	Task<T> GetById (I id);
 }";
-			string interfaceExists = @"public interface IExists<I> {
+			string interfaceExists = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IExists<I> {
 	Task<bool> Exists (I id);
 }";
-			string interfaceValidateData = @"public interface IValidateData<T> {
+			string interfaceValidateData = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IValidateData<T> {
 	bool ValidateData (T entity);
 }";
-			string interfaceService = @"public interface IBaseService<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I> {
+			string interfaceService = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IBaseService<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I> {
 }";
-			string interfaceRepository = @"public interface IBaseRepository<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I>, IValidateData<T> {
+			string interfaceRepository = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IBaseRepository<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I>, IValidateData<T> {
 }";
 
 			return new GeneratedInterfaces(interfaceAdd, interfaceModify, interfaceDelete, interfaceList, interfaceExists, interfaceValidateData, interfaceService, interfaceRepository);

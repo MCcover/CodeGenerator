@@ -30,6 +30,7 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGenerator));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.txtPort = new System.Windows.Forms.MaskedTextBox();
@@ -64,12 +65,15 @@
 			this.chkService = new System.Windows.Forms.CheckBox();
 			this.chkConstructor = new System.Windows.Forms.CheckBox();
 			this.chkModel = new System.Windows.Forms.CheckBox();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.txtProjectName = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvTables)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
 			this.grpTables.SuspendLayout();
 			this.grpTable.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -243,7 +247,7 @@
 			this.dgvTables.RowHeadersVisible = false;
 			this.dgvTables.RowHeadersWidth = 62;
 			this.dgvTables.RowTemplate.Height = 25;
-			this.dgvTables.Size = new System.Drawing.Size(328, 411);
+			this.dgvTables.Size = new System.Drawing.Size(328, 495);
 			this.dgvTables.TabIndex = 12;
 			this.dgvTables.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTables_CellEndEdit);
 			this.dgvTables.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvTables_CellMouseClick);
@@ -314,7 +318,7 @@
 			this.dgvTable.RowHeadersVisible = false;
 			this.dgvTable.RowHeadersWidth = 62;
 			this.dgvTable.RowTemplate.Height = 25;
-			this.dgvTable.Size = new System.Drawing.Size(418, 489);
+			this.dgvTable.Size = new System.Drawing.Size(430, 516);
 			this.dgvTable.TabIndex = 13;
 			this.dgvTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTable_CellEndEdit);
 			// 
@@ -362,9 +366,9 @@
 			// 
 			this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnGenerate.Location = new System.Drawing.Point(361, 588);
+			this.btnGenerate.Location = new System.Drawing.Point(361, 672);
 			this.btnGenerate.Name = "btnGenerate";
-			this.btnGenerate.Size = new System.Drawing.Size(427, 44);
+			this.btnGenerate.Size = new System.Drawing.Size(439, 44);
 			this.btnGenerate.TabIndex = 3;
 			this.btnGenerate.Text = "Generate Code";
 			this.btnGenerate.UseVisualStyleBackColor = true;
@@ -379,7 +383,7 @@
 			this.grpTables.ForeColor = System.Drawing.Color.Navy;
 			this.grpTables.Location = new System.Drawing.Point(12, 164);
 			this.grpTables.Name = "grpTables";
-			this.grpTables.Size = new System.Drawing.Size(340, 468);
+			this.grpTables.Size = new System.Drawing.Size(340, 552);
 			this.grpTables.TabIndex = 1;
 			this.grpTables.TabStop = false;
 			this.grpTables.Text = "Tables";
@@ -403,7 +407,7 @@
 			this.grpTable.ForeColor = System.Drawing.Color.Navy;
 			this.grpTable.Location = new System.Drawing.Point(358, 12);
 			this.grpTable.Name = "grpTable";
-			this.grpTable.Size = new System.Drawing.Size(430, 517);
+			this.grpTable.Size = new System.Drawing.Size(442, 544);
 			this.grpTable.TabIndex = 2;
 			this.grpTable.TabStop = false;
 			this.grpTable.Text = "Table";
@@ -418,9 +422,9 @@
 			this.groupBox2.Controls.Add(this.chkConstructor);
 			this.groupBox2.Controls.Add(this.chkModel);
 			this.groupBox2.ForeColor = System.Drawing.Color.Navy;
-			this.groupBox2.Location = new System.Drawing.Point(361, 535);
+			this.groupBox2.Location = new System.Drawing.Point(361, 619);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(427, 47);
+			this.groupBox2.Size = new System.Drawing.Size(439, 47);
 			this.groupBox2.TabIndex = 4;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Files";
@@ -488,16 +492,37 @@
 			this.chkModel.Text = "Model";
 			this.chkModel.UseVisualStyleBackColor = true;
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.txtProjectName);
+			this.groupBox3.ForeColor = System.Drawing.Color.Navy;
+			this.groupBox3.Location = new System.Drawing.Point(358, 562);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(442, 51);
+			this.groupBox3.TabIndex = 5;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Project Name";
+			// 
+			// txtProjectName
+			// 
+			this.txtProjectName.Location = new System.Drawing.Point(6, 22);
+			this.txtProjectName.Name = "txtProjectName";
+			this.txtProjectName.Size = new System.Drawing.Size(430, 23);
+			this.txtProjectName.TabIndex = 0;
+			// 
 			// FormGenerator
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 644);
+			this.ClientSize = new System.Drawing.Size(812, 728);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.grpTable);
 			this.Controls.Add(this.grpTables);
 			this.Controls.Add(this.btnGenerate);
 			this.Controls.Add(this.groupBox1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(828, 767);
 			this.Name = "FormGenerator";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Code Generator";
@@ -511,6 +536,8 @@
 			this.grpTable.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -550,5 +577,7 @@
 		private CheckBox chkPersistence;
 		private CheckBox chkInterfaces;
 		private TextBox txtFilterTables;
+		private GroupBox groupBox3;
+		private TextBox txtProjectName;
 	}
 }
