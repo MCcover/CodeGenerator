@@ -93,7 +93,7 @@ namespace CodeGenerator.Generators {
 
 			var parametersPk = "";
 			foreach (var column in columnsWithPk) {
-				parametersPk += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+				parametersPk += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}{(column.Iskey ? "Key" : "")}); " + Environment.NewLine + "\t\t";
 			}
 
 			#region Condition
@@ -118,7 +118,7 @@ namespace CodeGenerator.Generators {
 
 			#region LoadData
 
-			var loads = table.Columns.Select(x => "obj." + x.PropertyName + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");").ToList();
+			var loads = table.Columns.Select(x => "obj." + x.PropertyName + (x.Iskey ? "Key" : "") + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");").ToList();
 			var loadData = string.Join("" + Environment.NewLine + "\t\t", loads);
 
 			#endregion
@@ -126,14 +126,14 @@ namespace CodeGenerator.Generators {
 			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
 $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{className}}}}Id> {{
 
-	private IConnecion _connection;
+	private IConnection _connection;
 	
-	public {{{{className}}}}Repository(IConnecion connection) {{
+	public {{{{className}}}}Repository(IConnection connection) {{
 		_connection = connection;
 	}}
 	
 	public async Task<bool> Add({{{{className}}}} entity) {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = {{{{insertSql}}}};
@@ -142,13 +142,13 @@ $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}},
 			
 		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
-		_connection.Close();
+		await _connection.Disconnect();
 			
 		return affectedRows > 0;
 	}}
 		
 	public async Task<bool> Modify({{{{className}}}} entity) {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = {{{{modifySql}}}};
@@ -157,13 +157,13 @@ $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}},
 			
 		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
-		_connection.Close();
+		await _connection.Disconnect();
 			
 		return affectedRows > 0;
 	}}
 	
 	public async Task<bool> Delete({{{{className}}}}Id id) {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""DELETE FROM {{{{tableName}}}} "" +
@@ -173,13 +173,13 @@ $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}},
 			
 		var affectedRows = await cmd.ExecuteNonQueryAsync();
 	
-		_connection.Close();
+		await _connection.Disconnect();
 			
 		return affectedRows > 0;
 	}}
 	
 	public async Task<bool> Exists({{{{className}}}}Id id) {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""SELECT 1 AS exists FROM {{{{tableName}}}} "" +
@@ -189,27 +189,27 @@ $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}},
 			
 		var existsValue = (int?)await cmd.ExecuteScalarAsync();
 	
-		_connection.Close();
+		await _connection.Disconnect();
 			
 		return existsValue != null;
 	}}
 	
 	public async Task<List<{{{{className}}}}>> GetAll() {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""SELECT {{{{columns}}}} "" +
 						  ""FROM {{{{tableName}}}}; "";
 			
-		var list = cmd.ExecuteSelectList<{{{{className}}}}>(LoadData);
+		var list = await cmd.ExecuteSelectList<{{{{className}}}}>(LoadData);
 			
-		_connection.Close();
+		await _connection.Disconnect();
 			
 		return list;
 	}}
 	
 	public async Task<{{{{className}}}}> GetById({{{{className}}}}Id id) {{
-		_connection.Open();
+		await _connection.Connect();
 			
 		var cmd = _connection.CreateCommand();
 		cmd.CommandText = ""SELECT {{{{columns}}}} "" +
@@ -218,15 +218,11 @@ $@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}},
 			
 		ConditionsParameters(cmd, id);
 
-		var result = cmd.ExecuteSelect<{{{{className}}}}>(LoadData);
+		var result = await cmd.ExecuteSelect<{{{{className}}}}>(LoadData);
 
-		_connection.Close();
+		await _connection.Disconnect();
 
 		return result;
-	}}
-	
-	public bool ValidateData({{{{className}}}} entity) {{
-		throw new NotImplementedException();
 	}}
 
 	public void LoadData({{{{className}}}} obj, DbDataReader dr) {{

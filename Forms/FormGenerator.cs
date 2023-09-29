@@ -4,6 +4,7 @@ using CodeGenerator.Generators.Abstracts;
 using CodeGenerator.Model;
 using CodeGenerator.Model.Enums;
 using CodeGenerator.Model.Table;
+using System.Reflection;
 
 namespace CodeGenerator.Forms {
 
@@ -28,6 +29,11 @@ namespace CodeGenerator.Forms {
 
 		private void FormGenerator_Load(object sender, EventArgs e) {
 			cmbDatabase.DataSource = Enum.GetValues(typeof(Database));
+
+			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			version = version[..version.LastIndexOf(".")];
+
+			Text = "Code Generator V" + version;
 		}
 
 		private async void BtnConnectDisconnect_Click(object sender, EventArgs e) {

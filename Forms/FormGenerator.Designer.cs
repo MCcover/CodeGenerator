@@ -525,7 +525,6 @@
 			this.MinimumSize = new System.Drawing.Size(828, 767);
 			this.Name = "FormGenerator";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Code Generator";
 			this.Load += new System.EventHandler(this.FormGenerator_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();

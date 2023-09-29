@@ -9,12 +9,15 @@ namespace CodeGenerator.Generators.Generate.Generic {
 
 			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine;
 
-			text += "public partial class {{className}} : {{className}}Id {" + Environment.NewLine;
+			text += "public partial class {{className}} : {{className}}Id, IValidateData<{{className}}Id> {" + Environment.NewLine;
 
 			foreach (var column in noPk) {
 				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
 			}
 
+			text += "\tpublic bool ValidateData ({{className}}Id entity) {" + Environment.NewLine;
+			text += "\t\tthrow new NotImplementedException();" + Environment.NewLine;
+			text += "\t}" + Environment.NewLine;
 			text += "}";
 
 			text = text.Replace("{{className}}", table.ClassName);
@@ -31,7 +34,7 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			text += "public class {{className}}Id {" + Environment.NewLine;
 
 			foreach (var column in pk) {
-				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
+				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName}Key {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
 			}
 
 			text += "}";
@@ -51,7 +54,7 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			text += "\tpublic {{className}}(){" + Environment.NewLine;
 
 			foreach (var column in table.Columns) {
-				text += $"\t\t{column.PropertyName} = default;" + Environment.NewLine;
+				text += $"\t\t{column.PropertyName}{(column.Iskey ? "Key" : "")} = default;" + Environment.NewLine;
 			}
 
 			text += "\t}" + Environment.NewLine + Environment.NewLine;
@@ -100,7 +103,7 @@ namespace CodeGenerator.Generators.Generate.Generic {
 	}
 
 	public async Task<bool> Add({{className}} entity) {
-		if (_{{className}}Repository.ValidateData(entity)) {
+		if (entity.ValidateData(entity)) {
 			return await _{{className}}Repository.Add(entity);
 		}
 		return false;
@@ -114,27 +117,21 @@ namespace CodeGenerator.Generators.Generate.Generic {
 	}
 
 	public async Task<bool> Exists({{className}}Id id) {
-		if (id == 0) {
-			throw new Exception(""{{className}} id is empty"");
-		}
 		return await _{{className}}Repository.Exists(id);
 	}
 
-	public List<{{className}}> GetAll() {
-		return _{{className}}Repository.GetAll();
+	public async Task<List<{{className}}>> GetAll() {
+		return await _{{className}}Repository.GetAll();
 	}
 
 	public async Task<{{className}}> GetById({{className}}Id id) {
-		if (!await Exists(id)) {
-			throw new Exception(""{{className}} id dosen't exists"");
-		}
 		return await _{{className}}Repository.GetById(id);
 	}
 
 	public async Task<bool> Modify({{className}} entity) {
-		if (!await Exists(entity.{{className}}Id)) {
+		if (!await Exists(entity)) {
 			throw new Exception(""{{className}} id is empty"");
-		} else if (_{{className}}Repository.ValidateData(entity)) {
+		} else if (entity.ValidateData(entity)) {
 			return await _{{className}}Repository.Modify(entity);
 		}
 		return false;
@@ -162,7 +159,7 @@ namespace CodeGenerator.Generators.Generate.Generic {
 }";
 			string interfaceList = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
 @"public interface IList<T, I> {
-	List<T> GetAll ();
+	Task<List<T>> GetAll ();
 	Task<T> GetById (I id);
 }";
 			string interfaceExists = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
@@ -177,10 +174,26 @@ namespace CodeGenerator.Generators.Generate.Generic {
 @"public interface IBaseService<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I> {
 }";
 			string interfaceRepository = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
-@"public interface IBaseRepository<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I>, IValidateData<T> {
+@"public interface IBaseRepository<T, I> : IAdd<T>, IModify<T>, IDelete<I>, IList<T, I>, IExists<I> {
 }";
 
-			return new GeneratedInterfaces(interfaceAdd, interfaceModify, interfaceDelete, interfaceList, interfaceExists, interfaceValidateData, interfaceService, interfaceRepository);
+			string interfaceConnection = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface IConnection {
+
+	public DbCommand CreateCommand();
+
+	public Task Connect();
+
+	public Task Disconnect();
+
+	public Task BeginTransaction();
+
+	public Task CommitTransaction();
+
+	public Task CancelTransaction();
+
+}";
+			return new GeneratedInterfaces(interfaceAdd, interfaceModify, interfaceDelete, interfaceList, interfaceExists, interfaceValidateData, interfaceService, interfaceRepository, interfaceConnection);
 		}
 
 		public abstract string ConvertTypeBdToCSharp(string typeBd);

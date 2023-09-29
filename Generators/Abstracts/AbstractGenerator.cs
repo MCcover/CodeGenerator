@@ -167,6 +167,7 @@ namespace CodeGenerator.Generators.Abstracts {
 				var pathFileInterfaceRepository = Path.Combine(paths.PathInterfaces, "IBaseRepository.cs");
 				var pathFileInterfaceService = Path.Combine(paths.PathInterfaces, "IBaseService.cs");
 				var pathFileInterfaceValidateData = Path.Combine(paths.PathInterfaces, "IValidateData.cs");
+				var pathFileInterfaceConnection = Path.Combine(paths.PathInterfaces, "IConnection.cs");
 
 				GenerateFile(pathFileInterfaceAdd, generatedInfo.Interfaces.Add);
 				GenerateFile(pathFileInterfaceModify, generatedInfo.Interfaces.Modify);
@@ -176,6 +177,7 @@ namespace CodeGenerator.Generators.Abstracts {
 				GenerateFile(pathFileInterfaceRepository, generatedInfo.Interfaces.Repository);
 				GenerateFile(pathFileInterfaceService, generatedInfo.Interfaces.Service);
 				GenerateFile(pathFileInterfaceValidateData, generatedInfo.Interfaces.ValidateData);
+				GenerateFile(pathFileInterfaceConnection, generatedInfo.Interfaces.Connection);
 			}
 
 		}
@@ -263,7 +265,7 @@ public class GeneratedInterfaces {
 	public string ValidateData { get; set; }
 	public string Service { get; set; }
 	public string Repository { get; set; }
-
+	public string Connection { get; set; }
 	public GeneratedInterfaces(string add,
 							   string modify,
 							   string delete,
@@ -271,7 +273,8 @@ public class GeneratedInterfaces {
 							   string exists,
 							   string validateData,
 							   string service,
-							   string repository) {
+							   string repository,
+							   string connection) {
 		Add = add;
 		Modify = modify;
 		Delete = delete;
@@ -280,6 +283,7 @@ public class GeneratedInterfaces {
 		ValidateData = validateData;
 		Service = service;
 		Repository = repository;
+		Connection = connection;
 	}
 }
 
