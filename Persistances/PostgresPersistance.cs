@@ -85,7 +85,8 @@ namespace CodeGenerator.Persistances {
 							  "																						 ccu.column_name = c.column_name)\n" +
 							  "		WHERE c.table_schema = 'public' AND\n" +
 							  "			  c.table_name = @tableName AND\n" +
-							  "			  c.table_catalog = @catalog\n" +
+							  "			  c.table_catalog = @catalog AND\n" +
+							  "			  tc.constraint_type = 'PRIMARY KEY'\n" +
 							  "		UNION (SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)),\n" +
 							  "					  c.column_name AS name, \n" +
 							  "					  c.udt_name AS type, \n" +

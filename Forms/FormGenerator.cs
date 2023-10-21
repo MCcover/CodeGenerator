@@ -244,11 +244,19 @@ namespace CodeGenerator.Forms {
 				var row = new DataGridViewRow();
 				row.CreateCells(dgvTable);
 
-				row.Cells[ColConstructor.Index].Value = column.InConstructor;
+				row.Cells[ColConstructor.Index].Value = !column.IsNullable;
 				row.Cells[ColName.Index].Value = column.Name;
 				row.Cells[ColType.Index].Value = column.DataType;
-
 				row.Cells[ColPropertyName.Index].Value = column.PropertyName;
+
+				if (column.IsNullable) {
+					row.Cells[ColConstructor.Index].Style.BackColor = Color.LightGray;
+					row.Cells[ColConstructor.Index].ReadOnly = true;
+				}
+
+				if (column.Iskey) {
+					row.Cells[ColConstructor.Index].Value = false;
+				}
 
 				rows.Add(row);
 			}
