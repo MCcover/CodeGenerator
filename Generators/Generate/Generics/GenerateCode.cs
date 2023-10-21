@@ -96,9 +96,9 @@ namespace CodeGenerator.Generators.Generate.Generic {
 
 		public string GenerateService(string nameSpace, Table table) {
 			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
-@"public class {{className}}Service : IBaseService<{{className}}, {{className}}Id> {
-	private readonly IBaseRepository<{{className}}, {{className}}Id> _{{className}}Repository = null!;
-	public {{className}}Service(IBaseRepository<{{className}}, {{className}}Id> {{className}}Repository) {
+@"public class {{className}}Service : I{{className}}Service {
+	private readonly I{{className}}Repository _{{className}}Repository = null!;
+	public {{className}}Service(I{{className}}Repository {{className}}Repository) {
 		_{{className}}Repository = {{className}}Repository;
 	}
 
@@ -136,6 +136,28 @@ namespace CodeGenerator.Generators.Generate.Generic {
 		}
 		return false;
 	}
+}";
+
+			text = text.Replace("{{className}}", table.ClassName);
+
+			return text;
+		}
+
+		public string GenerateInterfaceService(string nameSpace, Table table) {
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface I{{className}}Service : IBaseService<{{className}}, {{className}}Id> { 
+
+}";
+
+			text = text.Replace("{{className}}", table.ClassName);
+
+			return text;
+		}
+
+		public string GenerateInterfaceRepository(string nameSpace, Table table) {
+			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
+@"public interface I{{className}}Repository : IBaseRepository<{{className}}, {{className}}Id> { 
+
 }";
 
 			text = text.Replace("{{className}}", table.ClassName);
@@ -196,6 +218,21 @@ namespace CodeGenerator.Generators.Generate.Generic {
 			return new GeneratedInterfaces(interfaceAdd, interfaceModify, interfaceDelete, interfaceList, interfaceExists, interfaceValidateData, interfaceService, interfaceRepository, interfaceConnection);
 		}
 
+		public string GenerateModelFrontend(Table table) {
+			var text = "class {{className}} {" + Environment.NewLine;
+
+			foreach (var column in table.Columns) {
+				text += $"\t{column.PropertyName} : {ConvertTypeBdToTypeScript(column.DataType)}; " + Environment.NewLine + Environment.NewLine;
+			}
+
+			text += "}";
+
+			text = text.Replace("{{className}}", table.ClassName);
+
+			return text;
+		}
+
 		public abstract string ConvertTypeBdToCSharp(string typeBd);
+		public abstract string ConvertTypeBdToTypeScript(string typeBd);
 	}
 }

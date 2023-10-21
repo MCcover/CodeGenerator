@@ -60,11 +60,14 @@
 			this.txtFilterTables = new System.Windows.Forms.TextBox();
 			this.grpTable = new System.Windows.Forms.GroupBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.chkInterfaces = new System.Windows.Forms.CheckBox();
-			this.chkPersistence = new System.Windows.Forms.CheckBox();
-			this.chkService = new System.Windows.Forms.CheckBox();
-			this.chkConstructor = new System.Windows.Forms.CheckBox();
-			this.chkModel = new System.Windows.Forms.CheckBox();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.chkModelFront = new System.Windows.Forms.CheckBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.chkModelBack = new System.Windows.Forms.CheckBox();
+			this.chkInterfacesBack = new System.Windows.Forms.CheckBox();
+			this.chkConstructorBack = new System.Windows.Forms.CheckBox();
+			this.chkPersistenceBack = new System.Windows.Forms.CheckBox();
+			this.chkServiceBack = new System.Windows.Forms.CheckBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.txtProjectName = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
@@ -73,6 +76,8 @@
 			this.grpTables.SuspendLayout();
 			this.grpTable.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.groupBox5.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -318,7 +323,7 @@
 			this.dgvTable.RowHeadersVisible = false;
 			this.dgvTable.RowHeadersWidth = 62;
 			this.dgvTable.RowTemplate.Height = 25;
-			this.dgvTable.Size = new System.Drawing.Size(430, 516);
+			this.dgvTable.Size = new System.Drawing.Size(430, 433);
 			this.dgvTable.TabIndex = 13;
 			this.dgvTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvTable_CellEndEdit);
 			// 
@@ -407,7 +412,7 @@
 			this.grpTable.ForeColor = System.Drawing.Color.Navy;
 			this.grpTable.Location = new System.Drawing.Point(358, 12);
 			this.grpTable.Name = "grpTable";
-			this.grpTable.Size = new System.Drawing.Size(442, 544);
+			this.grpTable.Size = new System.Drawing.Size(442, 461);
 			this.grpTable.TabIndex = 2;
 			this.grpTable.TabStop = false;
 			this.grpTable.Text = "Table";
@@ -416,87 +421,124 @@
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox2.Controls.Add(this.chkInterfaces);
-			this.groupBox2.Controls.Add(this.chkPersistence);
-			this.groupBox2.Controls.Add(this.chkService);
-			this.groupBox2.Controls.Add(this.chkConstructor);
-			this.groupBox2.Controls.Add(this.chkModel);
+			this.groupBox2.Controls.Add(this.groupBox5);
+			this.groupBox2.Controls.Add(this.groupBox4);
 			this.groupBox2.ForeColor = System.Drawing.Color.Navy;
-			this.groupBox2.Location = new System.Drawing.Point(361, 619);
+			this.groupBox2.Location = new System.Drawing.Point(361, 536);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(439, 47);
+			this.groupBox2.Size = new System.Drawing.Size(439, 130);
 			this.groupBox2.TabIndex = 4;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Files";
 			// 
-			// chkInterfaces
+			// groupBox5
 			// 
-			this.chkInterfaces.AutoSize = true;
-			this.chkInterfaces.ForeColor = System.Drawing.Color.Black;
-			this.chkInterfaces.Location = new System.Drawing.Point(336, 22);
-			this.chkInterfaces.Name = "chkInterfaces";
-			this.chkInterfaces.Size = new System.Drawing.Size(77, 19);
-			this.chkInterfaces.TabIndex = 4;
-			this.chkInterfaces.Text = "Interfaces";
-			this.chkInterfaces.UseVisualStyleBackColor = true;
+			this.groupBox5.Controls.Add(this.chkModelFront);
+			this.groupBox5.Location = new System.Drawing.Point(221, 24);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(212, 100);
+			this.groupBox5.TabIndex = 6;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Frontend";
 			// 
-			// chkPersistence
+			// chkModelFront
 			// 
-			this.chkPersistence.AutoSize = true;
-			this.chkPersistence.Checked = true;
-			this.chkPersistence.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkPersistence.ForeColor = System.Drawing.Color.Black;
-			this.chkPersistence.Location = new System.Drawing.Point(245, 22);
-			this.chkPersistence.Name = "chkPersistence";
-			this.chkPersistence.Size = new System.Drawing.Size(85, 19);
-			this.chkPersistence.TabIndex = 3;
-			this.chkPersistence.Text = "Persistence";
-			this.chkPersistence.UseVisualStyleBackColor = true;
+			this.chkModelFront.AutoSize = true;
+			this.chkModelFront.Checked = true;
+			this.chkModelFront.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkModelFront.ForeColor = System.Drawing.Color.Black;
+			this.chkModelFront.Location = new System.Drawing.Point(76, 45);
+			this.chkModelFront.Name = "chkModelFront";
+			this.chkModelFront.Size = new System.Drawing.Size(60, 19);
+			this.chkModelFront.TabIndex = 1;
+			this.chkModelFront.Text = "Model";
+			this.chkModelFront.UseVisualStyleBackColor = true;
 			// 
-			// chkService
+			// groupBox4
 			// 
-			this.chkService.AutoSize = true;
-			this.chkService.Checked = true;
-			this.chkService.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkService.ForeColor = System.Drawing.Color.Black;
-			this.chkService.Location = new System.Drawing.Point(176, 22);
-			this.chkService.Name = "chkService";
-			this.chkService.Size = new System.Drawing.Size(63, 19);
-			this.chkService.TabIndex = 2;
-			this.chkService.Text = "Service";
-			this.chkService.UseVisualStyleBackColor = true;
+			this.groupBox4.Controls.Add(this.chkModelBack);
+			this.groupBox4.Controls.Add(this.chkInterfacesBack);
+			this.groupBox4.Controls.Add(this.chkConstructorBack);
+			this.groupBox4.Controls.Add(this.chkPersistenceBack);
+			this.groupBox4.Controls.Add(this.chkServiceBack);
+			this.groupBox4.ForeColor = System.Drawing.Color.Navy;
+			this.groupBox4.Location = new System.Drawing.Point(6, 22);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(209, 100);
+			this.groupBox4.TabIndex = 5;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Backend";
 			// 
-			// chkConstructor
+			// chkModelBack
 			// 
-			this.chkConstructor.AutoSize = true;
-			this.chkConstructor.Checked = true;
-			this.chkConstructor.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkConstructor.ForeColor = System.Drawing.Color.Black;
-			this.chkConstructor.Location = new System.Drawing.Point(81, 22);
-			this.chkConstructor.Name = "chkConstructor";
-			this.chkConstructor.Size = new System.Drawing.Size(89, 19);
-			this.chkConstructor.TabIndex = 1;
-			this.chkConstructor.Text = "Constructor";
-			this.chkConstructor.UseVisualStyleBackColor = true;
+			this.chkModelBack.AutoSize = true;
+			this.chkModelBack.Checked = true;
+			this.chkModelBack.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkModelBack.ForeColor = System.Drawing.Color.Black;
+			this.chkModelBack.Location = new System.Drawing.Point(26, 22);
+			this.chkModelBack.Name = "chkModelBack";
+			this.chkModelBack.Size = new System.Drawing.Size(60, 19);
+			this.chkModelBack.TabIndex = 0;
+			this.chkModelBack.Text = "Model";
+			this.chkModelBack.UseVisualStyleBackColor = true;
 			// 
-			// chkModel
+			// chkInterfacesBack
 			// 
-			this.chkModel.AutoSize = true;
-			this.chkModel.Checked = true;
-			this.chkModel.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkModel.ForeColor = System.Drawing.Color.Black;
-			this.chkModel.Location = new System.Drawing.Point(15, 22);
-			this.chkModel.Name = "chkModel";
-			this.chkModel.Size = new System.Drawing.Size(60, 19);
-			this.chkModel.TabIndex = 0;
-			this.chkModel.Text = "Model";
-			this.chkModel.UseVisualStyleBackColor = true;
+			this.chkInterfacesBack.AutoSize = true;
+			this.chkInterfacesBack.ForeColor = System.Drawing.Color.Black;
+			this.chkInterfacesBack.Location = new System.Drawing.Point(57, 72);
+			this.chkInterfacesBack.Name = "chkInterfacesBack";
+			this.chkInterfacesBack.Size = new System.Drawing.Size(77, 19);
+			this.chkInterfacesBack.TabIndex = 4;
+			this.chkInterfacesBack.Text = "Interfaces";
+			this.chkInterfacesBack.UseVisualStyleBackColor = true;
+			// 
+			// chkConstructorBack
+			// 
+			this.chkConstructorBack.AutoSize = true;
+			this.chkConstructorBack.Checked = true;
+			this.chkConstructorBack.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkConstructorBack.ForeColor = System.Drawing.Color.Black;
+			this.chkConstructorBack.Location = new System.Drawing.Point(99, 22);
+			this.chkConstructorBack.Name = "chkConstructorBack";
+			this.chkConstructorBack.Size = new System.Drawing.Size(89, 19);
+			this.chkConstructorBack.TabIndex = 1;
+			this.chkConstructorBack.Text = "Constructor";
+			this.chkConstructorBack.UseVisualStyleBackColor = true;
+			// 
+			// chkPersistenceBack
+			// 
+			this.chkPersistenceBack.AutoSize = true;
+			this.chkPersistenceBack.Checked = true;
+			this.chkPersistenceBack.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkPersistenceBack.ForeColor = System.Drawing.Color.Black;
+			this.chkPersistenceBack.Location = new System.Drawing.Point(99, 47);
+			this.chkPersistenceBack.Name = "chkPersistenceBack";
+			this.chkPersistenceBack.Size = new System.Drawing.Size(85, 19);
+			this.chkPersistenceBack.TabIndex = 3;
+			this.chkPersistenceBack.Text = "Persistence";
+			this.chkPersistenceBack.UseVisualStyleBackColor = true;
+			// 
+			// chkServiceBack
+			// 
+			this.chkServiceBack.AutoSize = true;
+			this.chkServiceBack.Checked = true;
+			this.chkServiceBack.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkServiceBack.ForeColor = System.Drawing.Color.Black;
+			this.chkServiceBack.Location = new System.Drawing.Point(26, 47);
+			this.chkServiceBack.Name = "chkServiceBack";
+			this.chkServiceBack.Size = new System.Drawing.Size(63, 19);
+			this.chkServiceBack.TabIndex = 2;
+			this.chkServiceBack.Text = "Service";
+			this.chkServiceBack.UseVisualStyleBackColor = true;
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.txtProjectName);
 			this.groupBox3.ForeColor = System.Drawing.Color.Navy;
-			this.groupBox3.Location = new System.Drawing.Point(358, 562);
+			this.groupBox3.Location = new System.Drawing.Point(364, 479);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(442, 51);
 			this.groupBox3.TabIndex = 5;
@@ -534,7 +576,10 @@
 			this.grpTables.PerformLayout();
 			this.grpTable.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
@@ -570,13 +615,16 @@
 		private DataGridViewTextBoxColumn ColType;
 		private DataGridViewTextBoxColumn ColPropertyName;
 		private GroupBox groupBox2;
-		private CheckBox chkModel;
-		private CheckBox chkConstructor;
-		private CheckBox chkService;
-		private CheckBox chkPersistence;
-		private CheckBox chkInterfaces;
+		private CheckBox chkModelBack;
+		private CheckBox chkConstructorBack;
+		private CheckBox chkServiceBack;
+		private CheckBox chkPersistenceBack;
+		private CheckBox chkInterfacesBack;
 		private TextBox txtFilterTables;
 		private GroupBox groupBox3;
 		private TextBox txtProjectName;
+		private GroupBox groupBox5;
+		private CheckBox chkModelFront;
+		private GroupBox groupBox4;
 	}
 }

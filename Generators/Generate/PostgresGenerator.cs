@@ -68,6 +68,54 @@ namespace CodeGenerator.Generators {
 			return type;
 		}
 
+		public override string ConvertTypeBdToTypeScript(string typeBd) {
+			var typeScriptType = "";
+
+			switch (typeBd) {
+				case "bit":
+				case "bool":
+					typeScriptType = "boolean";
+					break;
+
+				case "bytea":
+					typeScriptType = "Uint8Array";
+					break;
+
+				case "date":
+				case "timestamp":
+				case "timetz":
+				case "timestamptz":
+					typeScriptType = "Date";
+					break;
+
+				case "numeric":
+				case "money":
+				case "float8":
+				case "float4":
+				case "int4":
+				case "int8":
+				case "int2":
+					typeScriptType = "number";
+					break;
+
+				case "uuid":
+				case "bpchar":
+				case "json":
+				case "text":
+				case "varchar":
+					typeScriptType = "string";
+					break;
+
+				case "interval":
+				case "time":
+					typeScriptType = "string"; // Ajusta según tus preferencias para representar intervalos de tiempo en TypeScript.
+					break;
+			}
+
+			return typeScriptType;
+		}
+
+
 		public override string GeneratePersistence(string nameSpace, Table table) {
 			var columnsSimple = table.Columns.Select(x => x.Name).ToList();
 			var columns = columnsSimple.Select(x => table.Name + "." + x).ToList();
@@ -124,7 +172,7 @@ namespace CodeGenerator.Generators {
 			#endregion
 
 			var text = "namespace " + nameSpace + "; " + Environment.NewLine + Environment.NewLine +
-$@"public class {{{{className}}}}Repository : IBaseRepository<{{{{className}}}}, {{{{className}}}}Id> {{
+$@"public class {{{{className}}}}Repository : I{{{{className}}}}Repository {{
 
 	private IConnection _connection;
 	

@@ -10,6 +10,8 @@ namespace CodeGenerator.Generators.Abstracts {
 		private const string FOLDER_INFRASTRUCTURE = "Infrastructure";
 		private const string FOLDER_PERSISTENCE = "Persistence";
 		private const string FOLDER_SERVICES = "Services";
+		private const string FOLDER_FRONTEND = "Frontend";
+		private const string FOLDER_BACKEND = "Backend";
 		private const string FOLDER_INTERFACES = "Interfaces";
 
 		public void Generate(string projectName, List<Table> tables, FilesToGenerate filesToGenerate, string path) {
@@ -17,9 +19,12 @@ namespace CodeGenerator.Generators.Abstracts {
 				   modelPk = "",
 				   constructor = "",
 				   service = "",
-				   persistence = "";
+				   persistence = "",
+				   interfaceService = "",
+				   interfaceRepository = "",
+				   modelFrontend = "";
 
-			if (filesToGenerate.GenerateInterfaces) {
+			if (filesToGenerate.Backend.GenerateInterfaces) {
 				var nameSpace = projectName + ".Interfaces";
 				var interfaces = GenerateInterfaces(nameSpace);
 
@@ -37,35 +42,45 @@ namespace CodeGenerator.Generators.Abstracts {
 				constructor = "";
 				service = "";
 				persistence = "";
+				interfaceService = "";
+				interfaceRepository = "";
+				modelFrontend = "";
 
 				var generatedInfo = new GeneratedFileInfo(table, null);
 
 				var paths = GenerateFolderStructure(path, generatedInfo);
 
-				if (filesToGenerate.GenerateModel) {
+				if (filesToGenerate.Backend.GenerateModel) {
 					var nameSpace = projectName + "." + string.Join(".", paths.PathDomainFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
 
 					model = GenerateModel(nameSpace, table);
 					modelPk = GenerateModelPk(nameSpace, table);
 				}
 
-				if (filesToGenerate.GenerateConstructor) {
+				if (filesToGenerate.Backend.GenerateConstructor) {
 					var nameSpace = projectName + "." + string.Join(".", paths.PathDomainFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
 					constructor = GenerateConstructor(nameSpace, table);
 				}
 
-				if (filesToGenerate.GenerateService) {
+				if (filesToGenerate.Backend.GenerateService) {
 					var nameSpace = projectName + "." + string.Join(".", paths.PathServicesFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
 					service = GenerateService(nameSpace, table);
+
+					interfaceService = GenerateInterfaceService(nameSpace, table);
+					interfaceRepository = GenerateInterfaceRepository(nameSpace, table);
 				}
 
-				if (filesToGenerate.GeneratePersistence) {
+				if (filesToGenerate.Backend.GeneratePersistence) {
 					var nameSpace = projectName + "." + string.Join(".", paths.PathServicesFolder.Split("GeneratedCode")[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
 
 					persistence = GeneratePersistence(nameSpace, table);
 				}
 
-				generatedInfo.SetData(model, modelPk, constructor, service, persistence);
+				if (filesToGenerate.Frontend.GenerateModel) {
+					modelFrontend = GenerateModelFrontend(table);
+				}
+
+				generatedInfo.SetData(model, modelPk, constructor, service, persistence, interfaceRepository, interfaceService, modelFrontend);
 
 				GenerateFiles(paths, generatedInfo);
 			}
@@ -89,21 +104,26 @@ namespace CodeGenerator.Generators.Abstracts {
 
 			var pathGeneratedCodeFolder = Path.Combine(destinationPath, FOLDER_GENERATED_CODE);
 
+
+			GenerateDirectory(pathGeneratedCodeFolder, FOLDER_BACKEND);
+			var pathBackend = Path.Combine(pathGeneratedCodeFolder, FOLDER_BACKEND);
+
 			var pathInterfaces = "";
 			if (generatedInfo.Interfaces != null) {
-				GenerateDirectory(pathGeneratedCodeFolder, FOLDER_INTERFACES);
-				pathInterfaces = Path.Combine(pathGeneratedCodeFolder, FOLDER_INTERFACES);
+				GenerateDirectory(pathBackend, FOLDER_INTERFACES);
+				pathInterfaces = Path.Combine(pathBackend, FOLDER_INTERFACES);
 			}
 
 			string pathTableFolder = string.Empty;
 			string pathDomainFolder = string.Empty;
 			string pathPersistenceFolder = string.Empty;
 			string pathServicesFolder = string.Empty;
+			string pathFrontendFolder = string.Empty;
 
 			if (generatedInfo.Table != null) {
-				GenerateDirectory(pathGeneratedCodeFolder, generatedInfo.Table.Name.RemoveSpecialCharactersAndFormatText('_'));
+				GenerateDirectory(pathBackend, generatedInfo.Table.Name.RemoveSpecialCharactersAndFormatText('_'));
 
-				pathTableFolder = Path.Combine(pathGeneratedCodeFolder, generatedInfo.Table.Name.RemoveSpecialCharactersAndFormatText('_'));
+				pathTableFolder = Path.Combine(pathBackend, generatedInfo.Table.Name.RemoveSpecialCharactersAndFormatText('_'));
 
 				GenerateDirectory(pathTableFolder, FOLDER_DOMAIN);
 				GenerateDirectory(pathTableFolder, FOLDER_INFRASTRUCTURE);
@@ -116,9 +136,13 @@ namespace CodeGenerator.Generators.Abstracts {
 
 				pathPersistenceFolder = Path.Combine(pathInfrastructureFolder, FOLDER_PERSISTENCE);
 				pathServicesFolder = Path.Combine(pathInfrastructureFolder, FOLDER_SERVICES);
+
+				GenerateDirectory(pathGeneratedCodeFolder, FOLDER_FRONTEND);
+				pathFrontendFolder = Path.Combine(pathGeneratedCodeFolder, FOLDER_FRONTEND);
+
 			}
 
-			var paths = new Paths(pathDomainFolder, pathPersistenceFolder, pathServicesFolder, pathInterfaces);
+			var paths = new Paths(pathDomainFolder, pathPersistenceFolder, pathServicesFolder, pathInterfaces, pathFrontendFolder);
 
 			return paths;
 		}
@@ -136,6 +160,11 @@ namespace CodeGenerator.Generators.Abstracts {
 				var pathFileService = Path.Combine(paths.PathServicesFolder, generatedInfo.Table.ClassName + "Service.cs");
 				var pathFileRepository = Path.Combine(paths.PathPersistenceFolder, generatedInfo.Table.ClassName + "Repository.cs");
 
+				var pathFileInterfaceService = Path.Combine(paths.PathServicesFolder, "I" + generatedInfo.Table.ClassName + "Service.cs");
+				var pathFileInterfaceRepository = Path.Combine(paths.PathPersistenceFolder, "I" + generatedInfo.Table.ClassName + "Repository.cs");
+
+				var pathFileModelFrontend = Path.Combine(paths.PathModelFrontend, generatedInfo.Table.ClassName + ".ts");
+
 				if (generatedInfo.Model != null && generatedInfo.Model.Trim() != string.Empty) {
 					GenerateFile(pathFileDomain, generatedInfo.Model);
 				}
@@ -150,11 +179,18 @@ namespace CodeGenerator.Generators.Abstracts {
 
 				if (generatedInfo.Service != null && generatedInfo.Service.Trim() != string.Empty) {
 					GenerateFile(pathFileService, generatedInfo.Service);
+					GenerateFile(pathFileInterfaceService, generatedInfo.InterfaceService);
 				}
 
 				if (generatedInfo.Persistence != null && generatedInfo.Persistence.Trim() != string.Empty) {
 					GenerateFile(pathFileRepository, generatedInfo.Persistence);
+					GenerateFile(pathFileInterfaceRepository, generatedInfo.InterfaceRepository);
 				}
+
+				if (generatedInfo.ModelFrontend != null && generatedInfo.ModelFrontend.Trim() != string.Empty) {
+					GenerateFile(pathFileModelFrontend, generatedInfo.ModelFrontend);
+				}
+
 			}
 
 
@@ -200,6 +236,16 @@ namespace CodeGenerator.Generators.Abstracts {
 }
 
 public class FilesToGenerate {
+	public FilesToGenerateBackend Backend { get; set; }
+	public FilesToGenerateFrontend Frontend { get; set; }
+
+	public FilesToGenerate(FilesToGenerateBackend backend, FilesToGenerateFrontend frontend) {
+		Backend = backend;
+		Frontend = frontend;
+	}
+}
+
+public class FilesToGenerateBackend {
 	public bool GenerateModel { get; set; }
 	public bool GenerateConstructor { get; set; }
 	public bool GenerateService { get; set; }
@@ -207,7 +253,7 @@ public class FilesToGenerate {
 	public bool GenerateInterfaces { get; set; }
 
 
-	public FilesToGenerate(bool generateModel, bool generateConstructor, bool generateService, bool generatePersistence, bool generateInterfaces) {
+	public FilesToGenerateBackend(bool generateModel, bool generateConstructor, bool generateService, bool generatePersistence, bool generateInterfaces) {
 		GenerateModel = generateModel;
 		GenerateConstructor = generateConstructor;
 		GenerateService = generateService;
@@ -216,6 +262,15 @@ public class FilesToGenerate {
 	}
 }
 
+public class FilesToGenerateFrontend {
+	public bool GenerateModel { get; set; }
+
+	public FilesToGenerateFrontend(bool generateModel) {
+		GenerateModel = generateModel;
+	}
+}
+
+
 public class GeneratedFileInfo {
 	public Table Table { get; set; }
 	public string Model { get; set; }
@@ -223,6 +278,13 @@ public class GeneratedFileInfo {
 	public string Constructor { get; set; }
 	public string Service { get; set; }
 	public string Persistence { get; set; }
+
+	public string InterfaceRepository { get; set; }
+	public string InterfaceService { get; set; }
+
+	public string ModelFrontend { get; set; }
+
+
 	public GeneratedInterfaces Interfaces { get; set; }
 
 	public GeneratedFileInfo(Table table, GeneratedInterfaces interfaces) {
@@ -230,12 +292,15 @@ public class GeneratedFileInfo {
 		Interfaces = interfaces;
 	}
 
-	public void SetData(string model, string modelPk, string constructor, string service, string persistence) {
+	public void SetData(string model, string modelPk, string constructor, string service, string persistence, string interfaceRepository, string interfaceService, string modelFrontend) {
 		Model = model;
 		ModelPk = modelPk;
 		Constructor = constructor;
 		Service = service;
 		Persistence = persistence;
+		InterfaceRepository = interfaceRepository;
+		InterfaceService = interfaceService;
+		ModelFrontend = modelFrontend;
 	}
 
 	public bool HasInfo() {
@@ -245,13 +310,15 @@ public class GeneratedFileInfo {
 		bool hasService = (Service != null && Service.Trim() != string.Empty);
 		bool hasPersistence = (Persistence != null && Persistence.Trim() != string.Empty);
 		bool hasInterface = Interfaces != null;
+		bool hasModelFrontend = (ModelFrontend != null && ModelFrontend.Trim() != string.Empty);
 
 		return !(hasModel ||
 				 hasModelPk ||
 				 hasConstructor ||
 				 hasService ||
 				 hasPersistence ||
-				 hasInterface);
+				 hasInterface ||
+				 hasModelFrontend);
 	}
 
 }
@@ -292,13 +359,16 @@ public class Paths {
 	public string PathPersistenceFolder { get; set; }
 	public string PathServicesFolder { get; set; }
 	public string PathInterfaces { get; set; }
+	public string PathModelFrontend { get; set; }
 
 
-	public Paths(string pathDomainFolder, string pathPersistenceFolder, string pathServicesFolder, string pathInterfaces) {
+
+	public Paths(string pathDomainFolder, string pathPersistenceFolder, string pathServicesFolder, string pathInterfaces, string pathModelFrontend) {
 		PathDomainFolder = pathDomainFolder;
 		PathPersistenceFolder = pathPersistenceFolder;
 		PathServicesFolder = pathServicesFolder;
 		PathInterfaces = pathInterfaces;
+		PathModelFrontend = pathModelFrontend;
 	}
 }
 

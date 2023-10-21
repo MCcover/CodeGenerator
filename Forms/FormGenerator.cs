@@ -57,6 +57,12 @@ namespace CodeGenerator.Forms {
 
 				btnConnectDisconnect.Text = ConnectionState == ConnectionState.Connected ? "Disconnect Database" : "Connect Database";
 			} catch (Exception ex) {
+
+				try {
+					DatabaseConnector.Instance.DisposeConnector();
+				} catch {
+				}
+
 				MessageBox.Show(this, ex.Message, "ERROR!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 
@@ -64,12 +70,23 @@ namespace CodeGenerator.Forms {
 
 		private void BtnGenerate_Click(object sender, EventArgs e) {
 
-			if (!chkModel.Checked &&
-				!chkConstructor.Checked &&
-				!chkService.Checked &&
-				!chkPersistence.Checked &&
-				!chkInterfaces.Checked) {
+			if (!chkModelBack.Checked &&
+				!chkConstructorBack.Checked &&
+				!chkServiceBack.Checked &&
+				!chkPersistenceBack.Checked &&
+				!chkInterfacesBack.Checked &&
+				!chkModelFront.Checked) {
 				MessageBox.Show(this, "Select at least one file to generate.", "WARNING!!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
+
+			if (chkModelBack.Checked ||
+				chkConstructorBack.Checked ||
+				chkServiceBack.Checked ||
+				chkPersistenceBack.Checked ||
+				chkInterfacesBack.Checked ||
+				txtProjectName.Text.Trim() == string.Empty) {
+				MessageBox.Show(this, "If you select generate backend you must indicate project name.", "WARNING!!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
@@ -77,11 +94,17 @@ namespace CodeGenerator.Forms {
 				AbstractGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
 
 				List<Table> tables = GetTablesToGenerate();
-				FilesToGenerate filesToGenerate = new FilesToGenerate(chkModel.Checked,
-																	  chkConstructor.Checked,
-																	  chkService.Checked,
-																	  chkPersistence.Checked,
-																	  chkInterfaces.Checked);
+
+				FilesToGenerateBackend filesToGenerateBackend = new(chkModelBack.Checked,
+																	chkConstructorBack.Checked,
+																	chkServiceBack.Checked,
+																	chkPersistenceBack.Checked,
+																	chkInterfacesBack.Checked);
+
+				FilesToGenerateFrontend filesToGenerateFrontend = new(chkModelFront.Checked);
+
+
+				FilesToGenerate filesToGenerate = new(filesToGenerateBackend, filesToGenerateFrontend);
 
 				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 				var projectName = txtProjectName.Text;
