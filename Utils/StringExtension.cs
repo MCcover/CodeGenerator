@@ -1,18 +1,12 @@
-﻿using CodeGenerator.Model.Table;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace CodeGenerator.MethodsOfExtensions {
+namespace Utils.MethodsOfExtensions {
 
 	public static class StringExtension {
 
 		private static Dictionary<Type, string> _TypeMap;
-		private static Dictionary<Type, string> TypeMap { 
+		private static Dictionary<Type, string> TypeMap {
 			get {
 				if (_TypeMap == null) {
 					_TypeMap = new Dictionary<Type, string>();
@@ -52,7 +46,7 @@ namespace CodeGenerator.MethodsOfExtensions {
 					_TypeMap[typeof(DateTimeOffset?)] = "DbType.DateTimeOffset";
 					_TypeMap[typeof(object)] = "DbType.Object";
 					_TypeMap[typeof(DBNull)] = "DbType.Object";
-					
+
 				}
 
 				return _TypeMap;

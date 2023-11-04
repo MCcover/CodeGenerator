@@ -1,10 +1,11 @@
-﻿using CodeGenerator.DatabaseConnectors.Connectors;
-using CodeGenerator.MethodsOfExtensions;
-using CodeGenerator.Model.Table;
-using CodeGenerator.Persistances.Interfaces;
+﻿using DatabaseConnectors.Connectors;
+using DatabaseConnectors.Persistances.Interfaces;
+using DatabaseConnectors.Persistances.Utils;
+using Domain.Model.Table;
 using System.Data;
+using Utils.MethodsOfExtensions;
 
-namespace CodeGenerator.Persistances {
+namespace DatabaseConnectors.Persistances {
 
 	public class PostgresPersistance : IPersistance {
 		private static volatile object _lock = new object();

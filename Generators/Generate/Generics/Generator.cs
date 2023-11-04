@@ -1,5 +1,5 @@
 ﻿using CodeGenerator.Generators.Abstracts;
-using CodeGenerator.Model.Enums;
+using Utils.Model.Enums;
 
 namespace CodeGenerator.Generators {
 

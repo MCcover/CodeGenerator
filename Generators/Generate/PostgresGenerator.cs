@@ -1,5 +1,5 @@
 ﻿using CodeGenerator.Generators.Abstracts;
-using CodeGenerator.Model.Table;
+using Domain.Model.Table;
 
 namespace CodeGenerator.Generators {
 

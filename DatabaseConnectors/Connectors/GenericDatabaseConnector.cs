@@ -1,11 +1,11 @@
-﻿using CodeGenerator.DatabaseConnectors.Interfaces;
-using CodeGenerator.Model;
-using CodeGenerator.Model.Enums;
-using CodeGenerator.Persistances;
-using CodeGenerator.Persistances.Interfaces;
+﻿using DatabaseConnectors.Interfaces;
+using DatabaseConnectors.Persistances;
+using DatabaseConnectors.Persistances.Interfaces;
+using Domain.Model;
 using System.Data.Common;
+using Utils.Model.Enums;
 
-namespace CodeGenerator.DatabaseConnectors.Connectors {
+namespace DatabaseConnectors.Connectors {
 
 	public class GenericDatabaseConnector : IConnectorBase {
 		private IConnector _connector { get; set; }
@@ -36,6 +36,9 @@ namespace CodeGenerator.DatabaseConnectors.Connectors {
 		public void Disconnect() {
 			_connector.Disconnect();
 			_persistance.Dispose();
+
+			_connector = null;
+			_persistance = null;
 		}
 
 		public DbCommand GetCommand() => _connector.GetCommand();

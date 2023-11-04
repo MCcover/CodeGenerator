@@ -1,4 +1,4 @@
-﻿using CodeGenerator.Model.Table;
+﻿using Domain.Model.Table;
 
 namespace CodeGenerator.Generators.Generate.Generic {
 	public abstract class GenerateCode {

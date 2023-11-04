@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
 
-namespace CodeGenerator.Model {
+namespace Domain.Model {
 
 	public class ConnectionInfo {
 		const string IP_PATTERN = @"\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b";

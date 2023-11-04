@@ -1,7 +1,7 @@
-﻿using System.Data.Common;
-using CodeGenerator.Model;
+﻿using Domain.Model;
+using System.Data.Common;
 
-namespace CodeGenerator.DatabaseConnectors.Interfaces {
+namespace DatabaseConnectors.Interfaces {
 
 	public interface IConnector {
 

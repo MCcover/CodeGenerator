@@ -1,10 +1,10 @@
-using CodeGenerator.DatabaseConnectors.Connectors;
 using CodeGenerator.Generators;
 using CodeGenerator.Generators.Abstracts;
-using CodeGenerator.Model;
-using CodeGenerator.Model.Enums;
-using CodeGenerator.Model.Table;
+using DatabaseConnectors.Connectors;
+using Domain.Model;
+using Domain.Model.Table;
 using System.Reflection;
+using Utils.Model.Enums;
 
 namespace CodeGenerator.Forms {
 
@@ -80,11 +80,11 @@ namespace CodeGenerator.Forms {
 				return;
 			}
 
-			if (chkModelBack.Checked ||
-				chkConstructorBack.Checked ||
-				chkServiceBack.Checked ||
-				chkPersistenceBack.Checked ||
-				chkInterfacesBack.Checked ||
+			if ((!chkModelBack.Checked ||
+				!chkConstructorBack.Checked ||
+				!chkServiceBack.Checked ||
+				!chkPersistenceBack.Checked ||
+				!chkInterfacesBack.Checked) &&
 				txtProjectName.Text.Trim() == string.Empty) {
 				MessageBox.Show(this, "If you select generate backend you must indicate project name.", "WARNING!!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;

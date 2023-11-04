@@ -1,10 +1,10 @@
-﻿using CodeGenerator.DatabaseConnectors.Interfaces;
-using CodeGenerator.Model;
+﻿using DatabaseConnectors.Interfaces;
+using Domain.Model;
 using Npgsql;
 using System.Data;
 using System.Data.Common;
 
-namespace CodeGenerator.DatabaseConnectors.Connectors {
+namespace DatabaseConnectors.Connectors {
 	public class PostgresConnector : IConnector {
 
 		private NpgsqlConnection _connection;

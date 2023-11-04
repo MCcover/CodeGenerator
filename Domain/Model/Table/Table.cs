@@ -1,4 +1,4 @@
-﻿namespace CodeGenerator.Model.Table {
+﻿namespace Domain.Model.Table {
 
 	public class Table {
 		public string Name { get; set; }

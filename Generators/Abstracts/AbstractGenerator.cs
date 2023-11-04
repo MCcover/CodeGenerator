@@ -1,6 +1,6 @@
 ﻿using CodeGenerator.Generators.Generate.Generic;
-using CodeGenerator.MethodsOfExtensions;
-using CodeGenerator.Model.Table;
+using Domain.Model.Table;
+using Utils.MethodsOfExtensions;
 
 namespace CodeGenerator.Generators.Abstracts {
 	public abstract class AbstractGenerator : GenerateCode {

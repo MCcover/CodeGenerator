@@ -1,15 +1,13 @@
 ﻿using System.Data.Common;
 
-namespace CodeGenerator.DatabaseConnectors.Interfaces
-{
-    public interface IConnectorBase
-    {
-        void Connect();
+namespace DatabaseConnectors.Interfaces {
+	public interface IConnectorBase {
+		void Connect();
 
-        void Disconnect();
+		void Disconnect();
 
-        DbConnection GetConnection();
+		DbConnection GetConnection();
 
-        DbCommand GetCommand();
-    }
+		DbCommand GetCommand();
+	}
 }

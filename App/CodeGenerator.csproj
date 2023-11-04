@@ -12,15 +12,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="7.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\DataSources\" />
+    <ProjectReference Include="..\DatabaseConnectors\DatabaseConnectors.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Generators\Generators.csproj" />
+    <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
 
 </Project>
