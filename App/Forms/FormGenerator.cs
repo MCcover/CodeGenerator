@@ -1,8 +1,11 @@
-using CodeGenerator.Generators;
-using CodeGenerator.Generators.Abstracts;
 using DatabaseConnectors.Connectors;
 using Domain.Model;
 using Domain.Model.Table;
+using Generators.Enums.Lenguages;
+using Generators.GeneratorsOfCode;
+using Generators.Model.Backend;
+using Generators.Model.Frontend;
+using Generators.Model.Generator;
 using System.Reflection;
 using Utils.Model.Enums;
 
@@ -91,25 +94,25 @@ namespace CodeGenerator.Forms {
 			}
 
 			try {
-				AbstractGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
-
+				var projectName = txtProjectName.Text;
+				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 				List<Table> tables = GetTablesToGenerate();
 
-				FilesToGenerateBackend filesToGenerateBackend = new(chkModelBack.Checked,
-																	chkConstructorBack.Checked,
-																	chkServiceBack.Checked,
-																	chkPersistenceBack.Checked,
-																	chkInterfacesBack.Checked);
+				BackendInfo backendInfo = new(GetSelectedDatabase(),
+											  LenguagesBackend.CSHARP,
+											  projectName,
+											  chkModelBack.Checked,
+											  chkConstructorBack.Checked,
+											  chkServiceBack.Checked,
+											  chkPersistenceBack.Checked,
+											  chkInterfacesBack.Checked);
 
-				FilesToGenerateFrontend filesToGenerateFrontend = new(chkModelFront.Checked);
+				FrontendInfo frontendInfo = new(LenguagesFrontend.TYPESCRIPT, chkModelFront.Checked);
 
 
-				FilesToGenerate filesToGenerate = new(filesToGenerateBackend, filesToGenerateFrontend);
+				GeneratorInfo info = new(tables, path, frontendInfo, backendInfo);
 
-				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-				var projectName = txtProjectName.Text;
-
-				generator?.Generate(projectName, tables, filesToGenerate, path);
+				Generator.Instance.Generate(info);
 
 				MessageBox.Show(this, "Code Generated.", "SUCCESS!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} catch (Exception ex) {

@@ -5,13 +5,18 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "CodeGenerator.csproj", "{80079590-2B2D-49B5-A8E0-C77DDCFEFB58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseConnectors", "..\DatabaseConnectors\DatabaseConnectors.csproj", "{236BED0F-F41F-4DCE-B21C-1C8E693507F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseConnectors", "..\DatabaseConnectors\DatabaseConnectors.csproj", "{236BED0F-F41F-4DCE-B21C-1C8E693507F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "..\Utils\Utils.csproj", "{16576F45-989B-4E4E-BB6A-08C3E9B0A80E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "..\Utils\Utils.csproj", "{16576F45-989B-4E4E-BB6A-08C3E9B0A80E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generators", "..\Generators\Generators.csproj", "{37690C6D-A8BC-4BCA-9775-8F290BE1E702}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generators", "..\Generators\Generators.csproj", "{37690C6D-A8BC-4BCA-9775-8F290BE1E702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "..\Domain\Domain.csproj", "{C80BE5C4-F5D0-46AF-B07C-5B72D05C664D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain.csproj", "{C80BE5C4-F5D0-46AF-B07C-5B72D05C664D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A35559C-F49F-4A35-93C5-E734FA386587}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

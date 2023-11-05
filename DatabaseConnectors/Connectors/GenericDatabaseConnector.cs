@@ -35,7 +35,6 @@ namespace DatabaseConnectors.Connectors {
 
 		public void Disconnect() {
 			_connector.Disconnect();
-			_persistance.Dispose();
 
 			_connector = null;
 			_persistance = null;

@@ -3,32 +3,15 @@ using DatabaseConnectors.Persistances.Interfaces;
 using DatabaseConnectors.Persistances.Utils;
 using Domain.Model.Table;
 using System.Data;
+using Utils;
 using Utils.MethodsOfExtensions;
 
 namespace DatabaseConnectors.Persistances {
 
-	public class PostgresPersistance : IPersistance {
-		private static volatile object _lock = new object();
-
-		private static PostgresPersistance? _instance;
-
-		public static PostgresPersistance Instance {
-			get {
-				if (_instance == null) {
-					lock (_lock) {
-						if (_instance == null) {
-							_instance = new PostgresPersistance();
-						}
-					}
-				}
-				return _instance;
-			}
-		}
+	public class PostgresPersistance : SingletonWrapper<PostgresPersistance>, IPersistance {
 
 		private PostgresPersistance() {
 		}
-
-		public void Dispose() => _instance = null;
 
 		public async Task<List<Table>> GetTables() {
 			List<Table> tables = new();

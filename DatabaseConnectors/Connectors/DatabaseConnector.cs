@@ -1,24 +1,11 @@
 ﻿using Domain.Model;
+using Utils;
 using Utils.Model.Enums;
 
 namespace DatabaseConnectors.Connectors {
 
-	public class DatabaseConnector {
-		private static volatile object _lock = new object();
-		private static DatabaseConnector? _instance;
-
-		public static DatabaseConnector Instance {
-			get {
-				if (_instance == null) {
-					lock (_lock) {
-						if (_instance == null) {
-							_instance = new DatabaseConnector();
-						}
-					}
-				}
-				return _instance;
-			}
-		}
+	public class DatabaseConnector : SingletonWrapper<DatabaseConnector> {
+		private static volatile object _Lock = new();
 
 		private DatabaseConnector() {
 		}
@@ -36,7 +23,7 @@ namespace DatabaseConnectors.Connectors {
 
 		public GenericDatabaseConnector CreateConnector(ConnectionInfo info, Database database) {
 			if (_connector == null) {
-				lock (_lock) {
+				lock (_Lock) {
 					if (_connector == null) {
 						_connector = new GenericDatabaseConnector(info, database);
 					} else {
