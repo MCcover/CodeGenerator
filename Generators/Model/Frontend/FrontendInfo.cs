@@ -1,4 +1,4 @@
-﻿using Generators.Enums.Lenguages;
+﻿using Utils.Enums.Lenguages;
 
 namespace Generators.Model.Frontend {
 	public class FrontendInfo {

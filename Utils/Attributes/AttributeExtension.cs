@@ -1,7 +1,7 @@
 ﻿namespace Utils.Attributes {
 	public static class AttributeExtension {
 
-		public static List<T> GetAttributeValues<T, TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute {
+		public static List<T> GetAttributeValues<T, TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute<T> {
 			var memberInfo = member.GetType().GetMember(member.ToString()).FirstOrDefault();
 			var attributes = memberInfo?.GetCustomAttributes(typeof(TAttribute), false).OfType<TAttribute>();
 
@@ -25,14 +25,14 @@
 		}
 
 		public static List<string> GetAttributeValues<TMember>(this TMember member) {
-			return GetAttributeValues<string, CustomAttribute, TMember>(member);
+			return GetAttributeValues<string, CustomAttribute<string>, TMember>(member);
 		}
 
-		public static List<string> GetAttributeValues<TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute {
+		public static List<string> GetAttributeValues<TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute<string> {
 			return GetAttributeValues<string, TAttribute, TMember>(member);
 		}
 
-		public static T GetAttributeValue<T, TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute {
+		public static T GetAttributeValue<T, TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute<T> {
 			var results = GetAttributeValues<T, TAttribute, TMember>(member);
 
 			var result = default(T);
@@ -45,10 +45,10 @@
 		}
 
 		public static string GetAttributeValue<TMember>(this TMember member) {
-			return GetAttributeValue<string, CustomAttribute, TMember>(member);
+			return GetAttributeValue<string, CustomAttribute<string>, TMember>(member);
 		}
 
-		public static string GetAttributeValue<TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute {
+		public static string GetAttributeValue<TAttribute, TMember>(this TMember member) where TAttribute : CustomAttribute<string> {
 			return GetAttributeValue<string, TAttribute, TMember>(member);
 		}
 

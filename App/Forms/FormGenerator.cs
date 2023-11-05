@@ -1,12 +1,12 @@
 using DatabaseConnectors.Connectors;
 using Domain.Model;
 using Domain.Model.Table;
-using Generators.Enums.Lenguages;
 using Generators.GeneratorsOfCode;
 using Generators.Model.Backend;
 using Generators.Model.Frontend;
 using Generators.Model.Generator;
 using System.Reflection;
+using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
 
 namespace CodeGenerator.Forms {
@@ -37,6 +37,7 @@ namespace CodeGenerator.Forms {
 			version = version[..version.LastIndexOf(".")];
 
 			Text = "Code Generator V" + version;
+
 		}
 
 		private async void BtnConnectDisconnect_Click(object sender, EventArgs e) {
@@ -99,7 +100,7 @@ namespace CodeGenerator.Forms {
 				List<Table> tables = GetTablesToGenerate();
 
 				BackendInfo backendInfo = new(GetSelectedDatabase(),
-											  LenguagesBackend.CSHARP,
+											  LenguagesBackend.CSharp,
 											  projectName,
 											  chkModelBack.Checked,
 											  chkConstructorBack.Checked,
@@ -107,7 +108,7 @@ namespace CodeGenerator.Forms {
 											  chkPersistenceBack.Checked,
 											  chkInterfacesBack.Checked);
 
-				FrontendInfo frontendInfo = new(LenguagesFrontend.TYPESCRIPT, chkModelFront.Checked);
+				FrontendInfo frontendInfo = new(LenguagesFrontend.TypeScript, chkModelFront.Checked);
 
 
 				GeneratorInfo info = new(tables, path, frontendInfo, backendInfo);

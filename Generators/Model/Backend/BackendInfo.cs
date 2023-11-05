@@ -1,4 +1,4 @@
-﻿using Generators.Enums.Lenguages;
+﻿using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
 
 namespace Generators.Model.Backend {

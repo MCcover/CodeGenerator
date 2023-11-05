@@ -1,9 +1,9 @@
 ﻿namespace Utils.Attributes {
-	public class CustomAttribute : Attribute {
+	public class CustomAttribute<T> : Attribute {
 
-		public string Value { get; }
+		public T Value { get; }
 
-		public CustomAttribute(string value) {
+		public CustomAttribute(T value) {
 			Value = value;
 		}
 	}

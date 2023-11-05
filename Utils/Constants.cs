@@ -1,4 +1,4 @@
-﻿namespace Generators {
+﻿namespace Utils {
 
 	public class Constants {
 		public const string CSHARP = "CSharp";
