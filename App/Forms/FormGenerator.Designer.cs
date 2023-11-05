@@ -61,8 +61,12 @@
 			grpTable = new GroupBox();
 			groupBox2 = new GroupBox();
 			groupBox5 = new GroupBox();
+			cmbLenguageFrontend = new ComboBox();
+			label8 = new Label();
 			chkModelFront = new CheckBox();
 			groupBox4 = new GroupBox();
+			cmbLenguageBackend = new ComboBox();
+			label7 = new Label();
 			chkModelBack = new CheckBox();
 			chkInterfacesBack = new CheckBox();
 			chkConstructorBack = new CheckBox();
@@ -70,10 +74,6 @@
 			chkServiceBack = new CheckBox();
 			groupBox3 = new GroupBox();
 			txtProjectName = new TextBox();
-			label7 = new Label();
-			cmbLenguageBackend = new ComboBox();
-			cmbLenguageFrontend = new ComboBox();
-			label8 = new Label();
 			groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dgvTables).BeginInit();
 			((System.ComponentModel.ISupportInitialize)dgvTable).BeginInit();
@@ -429,6 +429,25 @@
 			groupBox5.TabStop = false;
 			groupBox5.Text = "Frontend";
 			// 
+			// cmbLenguageFrontend
+			// 
+			cmbLenguageFrontend.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmbLenguageFrontend.FormattingEnabled = true;
+			cmbLenguageFrontend.Location = new Point(70, 16);
+			cmbLenguageFrontend.Name = "cmbLenguageFrontend";
+			cmbLenguageFrontend.Size = new Size(136, 23);
+			cmbLenguageFrontend.TabIndex = 8;
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.ForeColor = Color.Black;
+			label8.Location = new Point(9, 19);
+			label8.Name = "label8";
+			label8.Size = new Size(65, 15);
+			label8.TabIndex = 7;
+			label8.Text = "Lenguage: ";
+			// 
 			// chkModelFront
 			// 
 			chkModelFront.AutoSize = true;
@@ -458,6 +477,25 @@
 			groupBox4.TabIndex = 5;
 			groupBox4.TabStop = false;
 			groupBox4.Text = "Backend";
+			// 
+			// cmbLenguageBackend
+			// 
+			cmbLenguageBackend.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmbLenguageBackend.FormattingEnabled = true;
+			cmbLenguageBackend.Location = new Point(67, 21);
+			cmbLenguageBackend.Name = "cmbLenguageBackend";
+			cmbLenguageBackend.Size = new Size(136, 23);
+			cmbLenguageBackend.TabIndex = 6;
+			// 
+			// label7
+			// 
+			label7.AutoSize = true;
+			label7.ForeColor = Color.Black;
+			label7.Location = new Point(6, 24);
+			label7.Name = "label7";
+			label7.Size = new Size(65, 15);
+			label7.TabIndex = 5;
+			label7.Text = "Lenguage: ";
 			// 
 			// chkModelBack
 			// 
@@ -540,44 +578,6 @@
 			txtProjectName.Name = "txtProjectName";
 			txtProjectName.Size = new Size(430, 23);
 			txtProjectName.TabIndex = 0;
-			// 
-			// label7
-			// 
-			label7.AutoSize = true;
-			label7.ForeColor = Color.Black;
-			label7.Location = new Point(6, 24);
-			label7.Name = "label7";
-			label7.Size = new Size(65, 15);
-			label7.TabIndex = 5;
-			label7.Text = "Lenguage: ";
-			// 
-			// cmbLenguageBackend
-			// 
-			cmbLenguageBackend.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmbLenguageBackend.FormattingEnabled = true;
-			cmbLenguageBackend.Location = new Point(67, 21);
-			cmbLenguageBackend.Name = "cmbLenguageBackend";
-			cmbLenguageBackend.Size = new Size(136, 23);
-			cmbLenguageBackend.TabIndex = 6;
-			// 
-			// cmbLenguageFrontend
-			// 
-			cmbLenguageFrontend.DropDownStyle = ComboBoxStyle.DropDownList;
-			cmbLenguageFrontend.FormattingEnabled = true;
-			cmbLenguageFrontend.Location = new Point(70, 16);
-			cmbLenguageFrontend.Name = "cmbLenguageFrontend";
-			cmbLenguageFrontend.Size = new Size(136, 23);
-			cmbLenguageFrontend.TabIndex = 8;
-			// 
-			// label8
-			// 
-			label8.AutoSize = true;
-			label8.ForeColor = Color.Black;
-			label8.Location = new Point(9, 19);
-			label8.Name = "label8";
-			label8.Size = new Size(65, 15);
-			label8.TabIndex = 7;
-			label8.Text = "Lenguage: ";
 			// 
 			// FormGenerator
 			// 

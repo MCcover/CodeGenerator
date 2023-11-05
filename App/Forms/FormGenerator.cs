@@ -6,6 +6,7 @@ using Generators.Model.Backend;
 using Generators.Model.Frontend;
 using Generators.Model.Generator;
 using System.Reflection;
+using Utils;
 using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
 
@@ -32,6 +33,16 @@ namespace CodeGenerator.Forms {
 
 		private void FormGenerator_Load(object sender, EventArgs e) {
 			cmbDatabase.DataSource = Enum.GetValues(typeof(Database));
+
+			var valuesBackend = EnumHelper.GetValuesAttributes<LenguagesBackend>();
+			cmbLenguageBackend.DataSource = valuesBackend;
+			cmbLenguageBackend.ValueMember = "Value";
+			cmbLenguageBackend.DisplayMember = "Value";
+
+			var valuesFrontend = EnumHelper.GetValuesAttributes<LenguagesFrontend>();
+			cmbLenguageFrontend.DataSource = valuesFrontend;
+			cmbLenguageFrontend.ValueMember = "Value";
+			cmbLenguageFrontend.DisplayMember = "Value";
 
 			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 			version = version[..version.LastIndexOf(".")];
@@ -100,7 +111,7 @@ namespace CodeGenerator.Forms {
 				List<Table> tables = GetTablesToGenerate();
 
 				BackendInfo backendInfo = new(GetSelectedDatabase(),
-											  LenguagesBackend.CSharp,
+											  GetSelectedLenguageBackend(),
 											  projectName,
 											  chkModelBack.Checked,
 											  chkConstructorBack.Checked,
@@ -108,7 +119,7 @@ namespace CodeGenerator.Forms {
 											  chkPersistenceBack.Checked,
 											  chkInterfacesBack.Checked);
 
-				FrontendInfo frontendInfo = new(LenguagesFrontend.TypeScript, chkModelFront.Checked);
+				FrontendInfo frontendInfo = new(GetSelectedLenguageFrontend(), chkModelFront.Checked);
 
 
 				GeneratorInfo info = new(tables, path, frontendInfo, backendInfo);
@@ -205,6 +216,16 @@ namespace CodeGenerator.Forms {
 		private Database GetSelectedDatabase() {
 			Enum.TryParse(cmbDatabase.SelectedValue?.ToString(), out Database database);
 			return database;
+		}
+
+		private LenguagesBackend GetSelectedLenguageBackend() {
+			Enum.TryParse(cmbLenguageBackend.SelectedValue?.ToString(), out LenguagesBackend lenguage);
+			return lenguage;
+		}
+
+		private LenguagesFrontend GetSelectedLenguageFrontend() {
+			Enum.TryParse(cmbLenguageFrontend.SelectedValue?.ToString(), out LenguagesFrontend lenguage);
+			return lenguage;
 		}
 
 		private void CleanTables() {

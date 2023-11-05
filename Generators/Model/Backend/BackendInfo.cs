@@ -5,7 +5,6 @@ namespace Generators.Model.Backend {
 	public class BackendInfo {
 
 		public string ProjectName { get; set; }
-
 		public bool GenerateModel { get; set; }
 		public bool GenerateConstructor { get; set; }
 		public bool GenerateService { get; set; }
@@ -13,6 +12,10 @@ namespace Generators.Model.Backend {
 		public bool GenerateInterfaces { get; set; }
 		public LenguagesBackend Lenguaje { get; set; }
 		public Database Database { get; set; }
+
+		public bool GenerateData {
+			get => GenerateModel || GenerateConstructor || GenerateService || GeneratePersistence || GenerateInterfaces;
+		}
 
 		public BackendInfo(Database database,
 						   LenguagesBackend lenguaje,
@@ -31,5 +34,7 @@ namespace Generators.Model.Backend {
 			Lenguaje = lenguaje;
 			ProjectName = projectName;
 		}
+
+
 	}
 }
