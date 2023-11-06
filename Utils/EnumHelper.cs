@@ -39,41 +39,45 @@ namespace Utils {
 			return GetValuesAttributes<TEnum, string>();
 		}
 
-		public static List<T> GetAttributeValues<T, TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<T> {
+		public static List<ValueEnum<T>> GetAttributesValues<T, TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<T> {
 			var memberInfo = member.GetType().GetMember(member.ToString()).FirstOrDefault();
 			var attributes = memberInfo?.GetCustomAttributes(typeof(TAttribute), false).OfType<TAttribute>();
 
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 			if (attributes != null && attributes.Any()) {
+
+
 				return attributes.Select(attribute => {
+
+
 					T value = default;
 					try {
 						value = (T)Convert.ChangeType(attribute.Value, typeof(T));
 					} catch (Exception) {
 					}
+					var name = Enum.GetName(typeof(TMember), member);
 
-					return value;
+					return new ValueEnum<T> {
+						Name = name,
+						Value = value
+					};
 				}).ToList();
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
 			}
 
-			return new List<T>();
+			return new List<ValueEnum<T>>();
 		}
 
-		public static List<string> GetAttributeValues<TMember>(TMember member) {
-			return GetAttributeValues<string, CustomAttribute<string>, TMember>(member);
+		public static List<ValueEnum<string>> GetAttributesValues<TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<string> {
+			return GetAttributesValues<string, TAttribute, TMember>(member);
 		}
 
-		public static List<string> GetAttributeValues<TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<string> {
-			return GetAttributeValues<string, TAttribute, TMember>(member);
-		}
+		public static ValueEnum<T> GetAttributesValue<T, TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<T> {
+			var results = GetAttributesValues<T, TAttribute, TMember>(member);
 
-		public static T GetAttributeValue<T, TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<T> {
-			var results = GetAttributeValues<T, TAttribute, TMember>(member);
-
-			var result = default(T);
+			var result = default(ValueEnum<T>);
 
 			if (results.Count > 0) {
 				result = results[0];
@@ -82,12 +86,8 @@ namespace Utils {
 			return result;
 		}
 
-		public static string GetAttributeValue<TMember>(TMember member) {
-			return GetAttributeValue<string, CustomAttribute<string>, TMember>(member);
-		}
-
-		public static string GetAttributeValue<TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<string> {
-			return GetAttributeValue<string, TAttribute, TMember>(member);
+		public static ValueEnum<string> GetAttributeValue<TAttribute, TMember>(TMember member) where TAttribute : CustomAttribute<string> {
+			return GetAttributesValue<string, TAttribute, TMember>(member);
 		}
 	}
 }

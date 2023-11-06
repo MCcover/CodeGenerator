@@ -22,14 +22,17 @@ namespace Generators.GeneratorsOfCode {
 			var generators = SelectGenerators(info);
 
 			foreach (var table in info.Tables) {
-				GeneratedBackend backend = generators.backendGenerator?.Generate(info.BackendInfo, table);
-				GeneratedFrontend frontend = generators.frontendGenerator?.Generate(info.FrontendInfo, table);
-
 				var pathsBackend = FolderBackendGenerator.GenerateFolderStructure(info.Path, info.BackendInfo, table);
 				var pathsFrontend = FolderFrontendGenerator.GenerateFolderStructure(info.Path, info.BackendInfo, table);
 
-				GenerateStructureBackend(info, table, backend, pathsBackend);
-				GenerateStructureFrontend(info, table, frontend, pathsFrontend);
+				info.BackendInfo.Paths = pathsBackend;
+				info.FrontendInfo.Paths = pathsFrontend;
+
+				GeneratedBackend backend = generators.backendGenerator?.Generate(info.BackendInfo, table);
+				GeneratedFrontend frontend = generators.frontendGenerator?.Generate(info.FrontendInfo, table);
+
+				GenerateFilesBackend(info, table, backend, pathsBackend);
+				GenerateFilesFrontend(info, table, frontend, pathsFrontend);
 
 			}
 
@@ -81,8 +84,8 @@ namespace Generators.GeneratorsOfCode {
 			return (backendGenerator, frontendGenerator);
 		}
 
-		private static void GenerateStructureBackend(GeneratorInfo info, Table table, GeneratedBackend backend, PathsBackend pathsBackend) {
-			var fileExtension = EnumHelper.GetAttributeValues<ExtensionFileAttribute, LenguagesBackend>(info.BackendInfo.Lenguaje)[0];
+		private static void GenerateFilesBackend(GeneratorInfo info, Table table, GeneratedBackend backend, PathsBackend pathsBackend) {
+			var fileExtension = EnumHelper.GetAttributeValue<ExtensionFileAttribute, LenguagesBackend>(info.BackendInfo.Lenguaje).Value;
 
 			var pathFileDomain = Path.Combine(pathsBackend.PathDomainFolder, table.ClassName + fileExtension);
 			var pathFileDomainPk = Path.Combine(pathsBackend.PathDomainFolder, table.ClassName + "Id" + fileExtension);
@@ -127,8 +130,8 @@ namespace Generators.GeneratorsOfCode {
 			}
 		}
 
-		private static void GenerateStructureFrontend(GeneratorInfo info, Table table, GeneratedFrontend frontend, PathsFrontend pathsFrontend) {
-			var fileExtension = EnumHelper.GetAttributeValue<ExtensionFileAttribute, LenguagesFrontend>(info.FrontendInfo.Lenguaje)[0];
+		private static void GenerateFilesFrontend(GeneratorInfo info, Table table, GeneratedFrontend frontend, PathsFrontend pathsFrontend) {
+			var fileExtension = EnumHelper.GetAttributeValue<ExtensionFileAttribute, LenguagesFrontend>(info.FrontendInfo.Lenguaje).Value;
 
 			var pathFileModelFrontend = Path.Combine(pathsFrontend.PathDomainFolder, table.ClassName + fileExtension);
 			FileHelper.GenerateFile(pathFileModelFrontend, frontend.Model);

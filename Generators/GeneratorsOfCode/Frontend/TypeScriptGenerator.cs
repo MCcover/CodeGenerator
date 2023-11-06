@@ -9,6 +9,10 @@ namespace Generators.GeneratorsOfCode.Frontend {
 	[LenguageFrontend(LenguagesFrontend.TypeScript)]
 	public class TypeScriptGenerator : IFrontendGenerator {
 		public GeneratedFrontend Generate(FrontendInfo info, Table table) {
+			if (info.Paths == null) {
+				throw new Exception("You must indicate the paths of the files to be generated");
+			}
+
 			var model = string.Empty;
 
 			if (info.GenerateModel) {

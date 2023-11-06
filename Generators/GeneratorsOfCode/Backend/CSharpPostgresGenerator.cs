@@ -1,6 +1,7 @@
 ﻿using Domain.Model.Table;
 using Generators.Interfaces;
 using Generators.Model.Backend;
+using Utils;
 using Utils.Attributes.Class;
 using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
@@ -11,6 +12,10 @@ namespace Generators.GeneratorsOfCode.Backend {
 	public class CSharpPostgresGenerator : IBackendGenerator {
 
 		public GeneratedBackend Generate(BackendInfo info, Table table) {
+
+			if (info.Paths == null) {
+				throw new Exception("You must indicate the paths of the files to be generated");
+			}
 
 			var model = string.Empty;
 			var modelPk = string.Empty;
@@ -25,26 +30,34 @@ namespace Generators.GeneratorsOfCode.Backend {
 			var interfaces = new GeneratedInterfaces();
 
 			if (info.GenerateModel) {
-				model = GenerateModel(info.ProjectName, table);
-				modelPk = GenerateModelPk(info.ProjectName, table);
+				var nameSpace = info.ProjectName + "." + string.Join(".", info.Paths.PathDomainFolder.Split(Constants.FOLDER_BACKEND)[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+				model = GenerateModel(nameSpace, table);
+				modelPk = GenerateModelPk(nameSpace, table);
 			}
 
 			if (info.GenerateConstructor) {
-				constructor = GenerateConstructor(info.ProjectName, table);
+				var nameSpace = info.ProjectName + "." + string.Join(".", info.Paths.PathDomainFolder.Split(Constants.FOLDER_BACKEND)[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+				constructor = GenerateConstructor(nameSpace, table);
 			}
 
 			if (info.GenerateService) {
-				interfaceService = GenerateInterfaceService(info.ProjectName, table);
-				service = GenerateService(info.ProjectName, table);
+				var nameSpace = info.ProjectName + "." + string.Join(".", info.Paths.PathServicesFolder.Split(Constants.FOLDER_BACKEND)[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+				interfaceService = GenerateInterfaceService(nameSpace, table);
+				service = GenerateService(nameSpace, table);
 			}
 
 			if (info.GeneratePersistence) {
-				interfaceService = GenerateInterfacePersistence(info.ProjectName, table);
-				persistence = GeneratePersistence(info.ProjectName, table);
+				var nameSpace = info.ProjectName + "." + string.Join(".", info.Paths.PathPersistenceFolder.Split(Constants.FOLDER_BACKEND)[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+				interfaceRepository = GenerateInterfacePersistence(nameSpace, table);
+				persistence = GeneratePersistence(nameSpace, table);
 			}
 
 			if (info.GenerateInterfaces) {
-				interfaces = GenerateInterfaces(info.ProjectName);
+				var nameSpace = info.ProjectName + "." + string.Join(".", info.Paths.PathInterfaces.Split(Constants.FOLDER_BACKEND)[1].Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+				interfaces = GenerateInterfaces(nameSpace);
 			}
 
 			return new GeneratedBackend(model, modelPk, constructor, service, persistence, interfaceRepository, interfaceService, interfaces);
@@ -265,69 +278,6 @@ namespace Generators.GeneratorsOfCode.Backend {
 			return new GeneratedInterfaces(interfaceAdd, interfaceModify, interfaceDelete, interfaceList, interfaceExists, interfaceValidateData, interfaceService, interfaceRepository, interfaceConnection);
 		}
 
-		public string ConvertTypeBdToCSharp(string typeBd) {
-			var type = "";
-			switch (typeBd) {
-				case "bit":
-				case "bool":
-					type = "bool";
-					break;
-
-				case "bytea":
-					type = "byte[]";
-					break;
-
-				case "date":
-				case "timestamp":
-				case "timetz":
-				case "timestamptz":
-					type = "DateTime";
-					break;
-
-				case "numeric":
-				case "money":
-					type = "decimal";
-					break;
-
-				case "float8":
-					type = "double";
-					break;
-
-				case "float4":
-					type = "float";
-					break;
-
-				case "uuid":
-					type = "Guid";
-					break;
-
-				case "int4":
-					type = "int";
-					break;
-
-				case "int8":
-					type = "long";
-					break;
-
-				case "int2":
-					type = "short";
-					break;
-
-				case "bpchar":
-				case "json":
-				case "text":
-				case "varchar":
-					type = "string";
-					break;
-
-				case "interval":
-				case "time":
-					type = "TimeSpan";
-					break;
-			}
-			return type;
-		}
-
 		public string GeneratePersistence(string nameSpace, Table table) {
 			var columnsSimple = table.Columns.Select(x => x.Name).ToList();
 			var columns = columnsSimple.Select(x => table.Name + "." + x).ToList();
@@ -523,6 +473,69 @@ $@"public class {{{{className}}}}Repository : I{{{{className}}}}Repository {{
 			text = text.Replace("{{primaryKey}}", ConvertTypeBdToCSharp(table.Columns[0].DataType));
 
 			return text;
+		}
+
+		public string ConvertTypeBdToCSharp(string typeBd) {
+			var type = "";
+			switch (typeBd) {
+				case "bit":
+				case "bool":
+					type = "bool";
+					break;
+
+				case "bytea":
+					type = "byte[]";
+					break;
+
+				case "date":
+				case "timestamp":
+				case "timetz":
+				case "timestamptz":
+					type = "DateTime";
+					break;
+
+				case "numeric":
+				case "money":
+					type = "decimal";
+					break;
+
+				case "float8":
+					type = "double";
+					break;
+
+				case "float4":
+					type = "float";
+					break;
+
+				case "uuid":
+					type = "Guid";
+					break;
+
+				case "int4":
+					type = "int";
+					break;
+
+				case "int8":
+					type = "long";
+					break;
+
+				case "int2":
+					type = "short";
+					break;
+
+				case "bpchar":
+				case "json":
+				case "text":
+				case "varchar":
+					type = "string";
+					break;
+
+				case "interval":
+				case "time":
+					type = "TimeSpan";
+					break;
+			}
+			return type;
 		}
 
 	}
