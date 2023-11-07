@@ -1,6 +1,8 @@
 ﻿namespace Utils {
 
 	public class Constants {
+		public const string VERSION = "1.0.4";
+
 		public const string CSHARP = "CSharp";
 		public const string CSHARP_EXTENSION = ".cs";
 
@@ -16,6 +18,7 @@
 
 		public const string FOLDER_BACKEND = "Backend";
 		public const string FOLDER_FRONTEND = "Frontend";
+
 	}
 
 }

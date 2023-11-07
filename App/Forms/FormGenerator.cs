@@ -5,7 +5,6 @@ using Generators.GeneratorsOfCode;
 using Generators.Model.Backend;
 using Generators.Model.Frontend;
 using Generators.Model.Generator;
-using System.Reflection;
 using Utils;
 using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
@@ -44,10 +43,7 @@ namespace CodeGenerator.Forms {
 			cmbLenguageFrontend.ValueMember = "Value";
 			cmbLenguageFrontend.DisplayMember = "Value";
 
-			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-			version = version[..version.LastIndexOf(".")];
-
-			Text = "Code Generator V" + version;
+			Text = "Code Generator V" + Constants.VERSION;
 
 		}
 
