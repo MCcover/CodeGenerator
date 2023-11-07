@@ -3,26 +3,12 @@ using Domain.Model;
 using Npgsql;
 using System.Data;
 using System.Data.Common;
+using Utils;
 
 namespace DatabaseConnectors.Connectors {
-	public class PostgresConnector : IConnector {
+	public class PostgresConnector : SingletonWrapper<PostgresConnector>, IConnector {
 
 		private NpgsqlConnection _connection;
-
-		private static volatile object _lock = new object();
-		private static PostgresConnector? _instance;
-		public static PostgresConnector Instance {
-			get {
-				if (_instance == null) {
-					lock (_lock) {
-						if (_instance == null) {
-							_instance = new PostgresConnector();
-						}
-					}
-				}
-				return _instance;
-			}
-		}
 
 		private PostgresConnector() {
 

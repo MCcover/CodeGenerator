@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Abstracts\**" />
+    <Compile Remove="Generate\**" />
+    <EmbeddedResource Remove="Abstracts\**" />
+    <EmbeddedResource Remove="Generate\**" />
+    <None Remove="Abstracts\**" />
+    <None Remove="Generate\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>

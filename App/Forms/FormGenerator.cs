@@ -1,9 +1,12 @@
-using CodeGenerator.Generators;
-using CodeGenerator.Generators.Abstracts;
 using DatabaseConnectors.Connectors;
 using Domain.Model;
 using Domain.Model.Table;
-using System.Reflection;
+using Generators.GeneratorsOfCode;
+using Generators.Model.Backend;
+using Generators.Model.Frontend;
+using Generators.Model.Generator;
+using Utils;
+using Utils.Enums.Lenguages;
 using Utils.Model.Enums;
 
 namespace CodeGenerator.Forms {
@@ -30,10 +33,18 @@ namespace CodeGenerator.Forms {
 		private void FormGenerator_Load(object sender, EventArgs e) {
 			cmbDatabase.DataSource = Enum.GetValues(typeof(Database));
 
-			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-			version = version[..version.LastIndexOf(".")];
+			var valuesBackend = EnumHelper.GetValuesAttributes<LenguagesBackend>();
+			cmbLenguageBackend.DataSource = valuesBackend;
+			cmbLenguageBackend.ValueMember = "Value";
+			cmbLenguageBackend.DisplayMember = "Value";
 
-			Text = "Code Generator V" + version;
+			var valuesFrontend = EnumHelper.GetValuesAttributes<LenguagesFrontend>();
+			cmbLenguageFrontend.DataSource = valuesFrontend;
+			cmbLenguageFrontend.ValueMember = "Value";
+			cmbLenguageFrontend.DisplayMember = "Value";
+
+			Text = "Code Generator V" + Constants.VERSION;
+
 		}
 
 		private async void BtnConnectDisconnect_Click(object sender, EventArgs e) {
@@ -91,25 +102,25 @@ namespace CodeGenerator.Forms {
 			}
 
 			try {
-				AbstractGenerator? generator = Generator.SelectGenerator(GetSelectedDatabase());
-
+				var projectName = txtProjectName.Text;
+				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 				List<Table> tables = GetTablesToGenerate();
 
-				FilesToGenerateBackend filesToGenerateBackend = new(chkModelBack.Checked,
-																	chkConstructorBack.Checked,
-																	chkServiceBack.Checked,
-																	chkPersistenceBack.Checked,
-																	chkInterfacesBack.Checked);
+				BackendInfo backendInfo = new(GetSelectedDatabase(),
+											  GetSelectedLenguageBackend(),
+											  projectName,
+											  chkModelBack.Checked,
+											  chkConstructorBack.Checked,
+											  chkServiceBack.Checked,
+											  chkPersistenceBack.Checked,
+											  chkInterfacesBack.Checked);
 
-				FilesToGenerateFrontend filesToGenerateFrontend = new(chkModelFront.Checked);
+				FrontendInfo frontendInfo = new(GetSelectedLenguageFrontend(), chkModelFront.Checked);
 
 
-				FilesToGenerate filesToGenerate = new(filesToGenerateBackend, filesToGenerateFrontend);
+				GeneratorInfo info = new(tables, path, frontendInfo, backendInfo);
 
-				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-				var projectName = txtProjectName.Text;
-
-				generator?.Generate(projectName, tables, filesToGenerate, path);
+				Generator.Instance.Generate(info);
 
 				MessageBox.Show(this, "Code Generated.", "SUCCESS!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} catch (Exception ex) {
@@ -201,6 +212,16 @@ namespace CodeGenerator.Forms {
 		private Database GetSelectedDatabase() {
 			Enum.TryParse(cmbDatabase.SelectedValue?.ToString(), out Database database);
 			return database;
+		}
+
+		private LenguagesBackend GetSelectedLenguageBackend() {
+			Enum.TryParse(cmbLenguageBackend.SelectedValue?.ToString(), out LenguagesBackend lenguage);
+			return lenguage;
+		}
+
+		private LenguagesFrontend GetSelectedLenguageFrontend() {
+			Enum.TryParse(cmbLenguageFrontend.SelectedValue?.ToString(), out LenguagesFrontend lenguage);
+			return lenguage;
 		}
 
 		private void CleanTables() {

@@ -2,7 +2,7 @@
 
 namespace DatabaseConnectors.Persistances.Interfaces {
 
-	public interface IPersistance : IDisposable {
+	public interface IPersistance {
 
 		Task<List<Table>> GetTables();
 
