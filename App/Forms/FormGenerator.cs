@@ -106,6 +106,8 @@ namespace CodeGenerator.Forms {
 				var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 				List<Table> tables = GetTablesToGenerate();
 
+				SetForeignsData(ref tables);
+
 				BackendInfo backendInfo = new(GetSelectedDatabase(),
 											  GetSelectedLenguageBackend(),
 											  projectName,
@@ -126,6 +128,48 @@ namespace CodeGenerator.Forms {
 			} catch (Exception ex) {
 				MessageBox.Show(this, ex.Message, "ERROR!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+		}
+
+		private void SetForeignsData(ref List<Table> tables) {
+			if (tables.Count <= 0) {
+				return;
+			}
+
+			var foreigns = tables.Select(x => x.Columns)
+								 .SelectMany(x => x)
+								 .Where(x => x.Foreign != null)
+								 .Select(x => x.Foreign)
+								 .ToList();
+
+			if (foreigns.Count <= 0) {
+				return;
+			}
+
+			var form = new FormForeigns(foreigns);
+			var dr = form.ShowDialog();
+			if (dr != DialogResult.OK) {
+				return;
+			}
+
+			var fixedForeigns = form.Foreings;
+
+			foreach (var table in tables) {
+				foreach (var column in table.Columns) {
+					if (column == null || column.Foreign == null) {
+						continue;
+					}
+
+					var foreign = fixedForeigns.Find(x => x.Equals(column.Foreign));
+
+					if (foreign == null) {
+						continue;
+					}
+
+					column.Foreign = foreign;
+
+				}
+			}
+
 		}
 
 		private async void DgvTables_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e) {

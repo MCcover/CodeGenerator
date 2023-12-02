@@ -72,7 +72,12 @@ namespace Generators.GeneratorsOfCode.Backend {
 			text += "public partial class {{className}} : {{className}}Id, IValidateData<{{className}}Id> {" + Environment.NewLine;
 
 			foreach (var column in noPk) {
-				text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
+				if (column.Foreign == null) {
+					text += $"\tpublic {ConvertTypeBdToCSharp(column.DataType)} {column.PropertyName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
+				} else {
+					text += $"\tpublic {column.Foreign.ClassName} {column.Foreign.ClassName} {{ get; set; }}" + Environment.NewLine + Environment.NewLine;
+				}
+
 			}
 
 			text += "\tpublic bool ValidateData ({{className}}Id entity) {" + Environment.NewLine;
@@ -127,7 +132,13 @@ namespace Generators.GeneratorsOfCode.Backend {
 				string[] parametersNames = new string[propsInConstructure.Count];
 				string[] parameters = new string[propsInConstructure.Count];
 				for (int i = 0; i < propsInConstructure.Count; i++) {
+
 					var type = ConvertTypeBdToCSharp(propsInConstructure[i].DataType);
+
+					if (propsInConstructure[i].Foreign != null) {
+						type = propsInConstructure[i].Foreign.ClassName;
+					}
+
 					var parameterName = propsInConstructure[i].PropertyName[..1].ToLower() + propsInConstructure[i].PropertyName[1..];
 
 					var parameter = type + " " + parameterName;
@@ -298,12 +309,22 @@ namespace Generators.GeneratorsOfCode.Backend {
 
 			var fullParameters = "";
 			foreach (var column in columnsNoPk) {
-				fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+				if (column.Foreign == null) {
+					fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+				} else {
+					fullParameters += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.Foreign.ClassName}.{column.PropertyName}); " + Environment.NewLine + "\t\t";
+				}
 			}
 
 			var parametersPk = "";
 			foreach (var column in columnsWithPk) {
-				parametersPk += $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}{(column.Iskey ? "Key" : "")}); " + Environment.NewLine + "\t\t";
+				var parameter = string.Empty;
+				if (column.Foreign == null) {
+					parameter = $"cmd.AddParameter(\"@{column.Name}\", entity.{column.PropertyName}{(column.Iskey ? "Key" : "")}); " + Environment.NewLine + "\t\t";
+				} else {
+					parameter = $"cmd.AddParameter(\"@{column.Name}\", entity.{column.Foreign.ClassName}.{column.PropertyName}{(column.Iskey ? "Key" : "")}); " + Environment.NewLine + "\t\t";
+				}
+				parametersPk += parameter;
 			}
 
 			#region Condition
@@ -328,7 +349,17 @@ namespace Generators.GeneratorsOfCode.Backend {
 
 			#region LoadData
 
-			var loads = table.Columns.Select(x => "obj." + x.PropertyName + (x.Iskey ? "Key" : "") + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");").ToList();
+			var loads = table.Columns.Select(x => {
+				var load = "";
+
+				if (x.Foreign == null) {
+					load = "obj." + x.PropertyName + (x.Iskey ? "Key" : "") + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");";
+				} else {
+					load = "obj." + x.Foreign.ClassName + "." + x.PropertyName + (x.Iskey ? "Key" : "") + $" = dr.GetValue<{ConvertTypeBdToCSharp(x.DataType) + (x.IsNullable ? "?" : "")}>(\"{x.Name}\");";
+				}
+
+				return load;
+			}).ToList();
 			var loadData = string.Join("" + Environment.NewLine + "\t\t", loads);
 
 			#endregion
